@@ -327,11 +327,11 @@ h1 em, .contact-section h2 em { color: var(--orange); font-family: Georgia, seri
 .case span, .case strong { display: block; font-size: 38px; line-height: .92; }
 .case strong { color: var(--acid); }
 .case small { display: block; margin-top: 75px; font: 10px/1.5 var(--mono); }
-.vox-visual { background: #ff9600; color: var(--ink); align-content: center; padding: 30px; }
-.vox-visual img { width: min(76%, 330px); aspect-ratio: 1; object-fit: cover; mix-blend-mode: multiply; }
+.vox-visual { background: #ff9600; color: var(--ink); align-content: center; padding: 20px 30px; }
+.vox-visual img { width: min(58%, 230px); aspect-ratio: 1; object-fit: cover; mix-blend-mode: multiply; }
 .quote-mark { position: absolute; font: 220px/.8 Georgia; opacity: .12; top: 10px; left: 30px; }
-.vox-visual > span { margin-top: 12px; font: 11px/1.5 var(--mono); letter-spacing: .12em; text-align: center; }
-.vox-visual > span strong { font: 700 30px var(--sans); letter-spacing: -.04em; }
+.vox-visual > span { margin-top: 4px; font: 10px/1.35 var(--mono); letter-spacing: .1em; text-align: center; }
+.vox-visual > span strong { font: 700 25px var(--sans); letter-spacing: -.04em; }
 .voice { display: flex; gap: 6px; align-items: center; position: absolute; }
 .voice i { width: 8px; border-radius: 5px; background: var(--ink); }
 .voice i:nth-child(1), .voice i:nth-child(5) { height: 25px; }
