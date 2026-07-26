@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f4f1e8"/>
+  <rect x="0" y="0" width="18" height="630" fill="#eaff52"/>
+  <rect x="68" y="62" width="66" height="66" fill="#11120f" transform="rotate(-3 101 95)"/>
+  <text x="101" y="102" text-anchor="middle" fill="#eaff52" font-family="ui-monospace,monospace" font-size="21" font-weight="700">DT</text>
+  <text x="158" y="102" fill="#11120f" font-family="Arial,Helvetica,sans-serif" font-size="28" font-weight="700">Drew Thomasson</text>
+  <circle cx="1006" cy="94" r="8" fill="#49af64"/>
+  <text x="1024" y="101" fill="#11120f" font-family="ui-monospace,monospace" font-size="15" letter-spacing="1">OPEN TO WORK</text>
+
+  <text x="68" y="248" fill="#11120f" font-family="Arial,Helvetica,sans-serif" font-size="80" font-weight="700" letter-spacing="-5">I build software</text>
+  <text x="68" y="338" fill="#11120f" font-family="Arial,Helvetica,sans-serif" font-size="80" font-weight="700" letter-spacing="-5">people</text>
+  <text x="322" y="338" fill="#ff7048" font-family="Georgia,serif" font-size="83" font-style="italic">actually use.</text>
+
+  <text x="70" y="430" fill="#55564f" font-family="Arial,Helvetica,sans-serif" font-size="25">Open-source AI, audio systems, and useful tools.</text>
+
+  <rect x="68" y="493" width="327" height="75" fill="#11120f"/>
+  <text x="92" y="539" fill="#eaff52" font-family="Arial,Helvetica,sans-serif" font-size="28" font-weight="700">19,500+ GitHub stars</text>
+  <text x="444" y="540" fill="#11120f" font-family="ui-monospace,monospace" font-size="18">PYTHON  •  GO  •  AI  •  MEDIA</text>
+
+  <path d="M921 224c53 8 100 39 126 85 27 48 27 106 0 154" fill="none" stroke="#6078ff" stroke-width="18"/>
+  <path d="M972 248c37 15 66 45 79 82" fill="none" stroke="#ff7048" stroke-width="18"/>
+  <circle cx="910" cy="366" r="102" fill="#6078ff"/>
+  <circle cx="910" cy="366" r="31" fill="#f4f1e8"/>
+  <circle cx="910" cy="366" r="10" fill="#11120f"/>
+  <path d="M855 366h110M910 311v110" stroke="#eaff52" stroke-width="8"/>
+</svg>
