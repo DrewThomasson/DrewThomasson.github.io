@@ -197,7 +197,7 @@ h1 em, .contact-section h2 em { color: var(--orange); font-family: Georgia, seri
 }
 .demo-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
 }
 .demo-card {
@@ -215,10 +215,12 @@ h1 em, .contact-section h2 em { color: var(--orange); font-family: Georgia, seri
   align-items: center;
 }
 .demo-card-comparison {
-  display: flex;
-  flex-direction: column;
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: .75fr 1.25fr;
+  gap: 28px;
+  align-items: center;
 }
-.demo-card:not(.demo-card-featured) { display: flex; flex-direction: column; }
 .demo-card-copy > span {
   font: 10px var(--mono);
   text-transform: uppercase;
@@ -239,17 +241,7 @@ h1 em, .contact-section h2 em { color: var(--orange); font-family: Georgia, seri
   background: #11120f;
 }
 .demo-card-featured video { margin-top: 0; }
-.demo-card:not(.demo-card-featured) video,
-.demo-audio-comparison { margin-top: auto; }
-.demo-audio-comparison {
-  display: grid;
-  align-content: center;
-  gap: 12px;
-  aspect-ratio: 16 / 9;
-  padding: 12px;
-  background: #dfe3c9;
-  border: 1px solid var(--ink);
-}
+.demo-audio-comparison { display: grid; gap: 12px; }
 .demo-audio-comparison label { display: block; padding: 14px; background: var(--ink); color: white; }
 .demo-audio-comparison label > span { display: block; margin-bottom: 10px; font: 10px var(--mono); text-transform: uppercase; }
 .demo-audio-comparison b { padding: 2px 6px; margin-right: 7px; color: var(--ink); background: var(--acid); }
@@ -448,8 +440,8 @@ footer i { margin: 0 7px; }
   .featured-project { grid-template-columns: 1fr; }
   .section-heading, .about-section { grid-template-columns: 1fr; }
   .project-grid { grid-template-columns: 1fr; }
-  .demo-intro, .lab-intro, .audio-comparisons, .demo-grid { grid-template-columns: 1fr; }
-  .demo-card-featured { grid-template-columns: 1fr; }
+  .demo-intro, .lab-intro, .audio-comparisons { grid-template-columns: 1fr; }
+  .demo-card-featured, .demo-card-comparison { grid-template-columns: 1fr; }
   .demo-card-featured video { margin-top: 20px; }
   .lab-flow { grid-template-columns: 1fr; }
   .lab-flow > i { transform: rotate(90deg); justify-self: center; }
@@ -475,7 +467,8 @@ footer i { margin: 0 7px; }
   .current-work article { min-height: 150px; }
   .current-work article + article { border-left: 0; border-top: 1px solid var(--ink); }
   .recognition-card figure { min-height: 430px; }
-  .demo-card-featured { grid-column: auto; }
+  .demo-grid { grid-template-columns: 1fr; }
+  .demo-card-featured, .demo-card-comparison { grid-column: auto; }
   .lab-tools { grid-template-columns: 1fr; }
   .lab-tools article + article { border-left: 0; border-top: 1px solid #44463f; }
   .comparison-heading { grid-template-columns: 1fr; min-height: 0; margin-bottom: 22px; }
