@@ -228,7 +228,8 @@ h1 em, .contact-section h2 em { color: var(--orange); font-family: Georgia, seri
 .demo-card video {
   display: block;
   width: 100%;
-  max-height: 340px;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
   margin-top: 20px;
   background: #11120f;
 }
