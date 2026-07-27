@@ -138,7 +138,7 @@
           </div>
           <p>
             Real samples generated with ebook2audiobook, from the default narrator
-            to cloned and fine-tuned voices. Press play to hear the finished result.
+            to cloned, fine-tuned, and multi-character voices. Press play to hear the finished result.
           </p>
         </div>
 
@@ -166,32 +166,30 @@
 
           <article class="demo-card">
             <div class="demo-card-copy">
-              <span>Voice demo / Calm</span>
-              <h4>Rainy day voice</h4>
-            </div>
-            <video controls preload="metadata" playsinline src="assets/demos/rainy-day-voice.mp4">
-              <a href="assets/demos/rainy-day-voice.mp4">Download the rainy day voice demo</a>
-            </video>
-          </article>
-
-          <article class="demo-card">
-            <div class="demo-card-copy">
-              <span>Voice demo / Expressive</span>
-              <h4>Cinematic narration</h4>
-            </div>
-            <video controls preload="metadata" playsinline src="assets/demos/scarlett-voice.mp4">
-              <a href="assets/demos/scarlett-voice.mp4">Download the cinematic voice demo</a>
-            </video>
-          </article>
-
-          <article class="demo-card">
-            <div class="demo-card-copy">
               <span>Voice demo / Naturalist</span>
               <h4>Documentary narration</h4>
             </div>
             <video controls preload="metadata" playsinline src="assets/demos/naturalist-voice.mp4">
               <a href="assets/demos/naturalist-voice.mp4">Download the naturalist voice demo</a>
             </video>
+          </article>
+
+          <article class="demo-card demo-card-comparison">
+            <div class="demo-card-copy">
+              <span>E2A-SML / Same story, two outputs</span>
+              <h4>The Lighthouse Signal</h4>
+              <p>Compare a standard single-narrator conversion with automatic narrator and character voice assignment from E2A-SML.</p>
+            </div>
+            <div class="demo-audio-comparison">
+              <label>
+                <span><b>A</b> Standard / one narrator</span>
+                <audio controls preload="metadata" src="assets/demos/lighthouse-standard.mp3"></audio>
+              </label>
+              <label>
+                <span><b>B</b> E2A-SML / narrator + three characters</span>
+                <audio controls preload="metadata" src="assets/demos/lighthouse-e2a-sml.mp3"></audio>
+              </label>
+            </div>
           </article>
         </div>
 
