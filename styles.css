@@ -340,6 +340,19 @@ h1 em, .contact-section h2 em { color: var(--orange); font-family: Georgia, seri
 .case span, .case strong { display: block; font-size: 38px; line-height: .92; }
 .case strong { color: var(--acid); }
 .case small { display: block; margin-top: 75px; font: 10px/1.5 var(--mono); }
+.sound-visual { background: #ffad93; padding: 45px; }
+.sound-meter { width: min(460px, 100%); padding: 28px; background: var(--ink); color: white; border: 1px solid var(--ink); box-shadow: 10px 10px 0 rgba(17,18,15,.2); }
+.sound-reading { display: flex; align-items: baseline; gap: 8px; }
+.sound-reading strong { font-size: clamp(70px, 10vw, 112px); line-height: .9; letter-spacing: -.08em; }
+.sound-reading span { color: var(--acid); font: 15px var(--mono); }
+.sound-wave { height: 70px; margin: 26px 0 20px; display: flex; align-items: center; gap: 7px; }
+.sound-wave i { flex: 1; height: 35%; background: var(--acid); }
+.sound-wave i:nth-child(2), .sound-wave i:nth-child(8) { height: 55%; }
+.sound-wave i:nth-child(3), .sound-wave i:nth-child(7) { height: 80%; }
+.sound-wave i:nth-child(4), .sound-wave i:nth-child(6) { height: 62%; }
+.sound-wave i:nth-child(5) { height: 100%; }
+.sound-status { display: flex; justify-content: space-between; gap: 12px; padding-top: 14px; border-top: 1px solid #53544e; color: #b7b8b2; font: 9px var(--mono); text-transform: uppercase; letter-spacing: .08em; }
+.sound-status span:last-child { color: #ff8068; }
 .vox-visual { background: #ff9600; color: var(--ink); align-content: center; padding: 20px 30px; }
 .vox-visual img { width: min(58%, 230px); aspect-ratio: 1; object-fit: cover; mix-blend-mode: multiply; }
 .quote-mark { position: absolute; font: 220px/.8 Georgia; opacity: .12; top: 10px; left: 30px; }
