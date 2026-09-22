@@ -405,7 +405,7 @@ h1 em, .contact-section h2 em { color: var(--orange); font-family: Georgia, seri
 .capabilities span { border: 1px solid var(--ink); padding: 10px 13px; font: 11px var(--mono); text-transform: uppercase; }
 .current-work {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   margin-top: 55px;
   border: 1px solid var(--ink);
 }
