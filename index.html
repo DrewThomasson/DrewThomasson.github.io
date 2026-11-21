@@ -417,9 +417,9 @@ function initAudio(){
 const BOOT=['standby','loading signal','loading projects','landing','alignment complete'];
 /* [start beat counted from 2.0 s at 0.5 s per beat, lines, small caption] */
 const KW=[[0,['audio'],'(record · measure · report)'],[2,['text-to-speech'],'(xtts · piper · more)'],[4,['voice','cloning'],'(five seconds of voice)'],
-  [6,['ai','fine-tuning'],'(xtts → piper)'],[8,['audio','analysis'],'(fft · dB · spectra)'],[10,['multi-voice','audiobooks'],'(narrator + characters)'],
-  [12,['local ai'],'(cpu or gpu)'],[14,['open source'],'(build in public)'],[16,['1,704'],'(languages)'],
-  [18,['python','go'],'(cli · desktop · docker)'],[20,['media','tooling'],'(ffmpeg · jellyfin)'],[22,['ebook2','audiobook'],'(20.6k ★ on github)'],
+  [6,['ai','fine-tuning'],'(xtts → piper)'],[8,['audio','analysis'],'(fft · dB · spectra)'],[10,['speech','synthesis'],'(narrator + characters)'],
+  [12,['local ai'],'(cpu or gpu)'],[14,['open source'],'(build in public)'],[16,['python','go'],'(cli · desktop · docker)'],
+  [18,['media','tooling'],'(ffmpeg · jellyfin)'],[20,['21,400★'],'(github stars)'],[22,['ebook2','audiobook'],'(1,704 languages)'],
   [24,['books','become','voices'],'']];
 const introEl=$('intro'),pipEl=document.querySelector('.pip'),wrapEl=document.querySelector('.wrap');
 let introAudio=null,introPhase='gate';
@@ -472,7 +472,7 @@ $('skip').addEventListener('click',()=>finishIntro(true));
   const u=await fetch('https://api.github.com/users/DrewThomasson');if(!u.ok)return;const user=await u.json();
   const r=await fetch('https://api.github.com/users/DrewThomasson/repos?per_page=100&type=owner');if(!r.ok)return;const repos=(await r.json()).filter(x=>!x.fork);
   const stars=repos.reduce((s,x)=>s+x.stargazers_count,0),forks=repos.reduce((s,x)=>s+x.forks_count,0),k=n=>(n/1000).toFixed(1).replace(/\.0$/,'')+'k';
-  $('sStars').textContent=stars.toLocaleString('en-US');$('sForks').textContent=forks.toLocaleString('en-US');
+  $('sStars').textContent=stars.toLocaleString('en-US');KW[10][1]=[stars.toLocaleString('en-US')+'★'];$('sForks').textContent=forks.toLocaleString('en-US');
   $('sRepos').textContent=user.public_repos;$('sFollow').textContent=user.followers.toLocaleString('en-US');
   const e=repos.find(x=>x.name==='ebook2audiobook');if(e)$('sE2a').textContent=k(e.stargazers_count)+' ★ · '+k(e.forks_count)+' forks';
   const v=repos.find(x=>x.name==='VoxNovel');if(v)$('sVox').textContent=v.stargazers_count+' ★ · '+v.forks_count+' forks';
