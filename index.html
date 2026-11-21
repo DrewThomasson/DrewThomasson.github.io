@@ -186,11 +186,17 @@ html.locked{overflow:hidden}
   .pipe{grid-template-columns:1fr}.arrow{transform:rotate(90deg);height:18px}
 }
 @media (max-width:560px){
-  .pip{top:34px;bottom:auto;width:132px}
-  .skycopy{padding-right:18px;min-height:560px}
+  .pip{top:56px;bottom:auto;width:132px}
+  .skytop #alt{display:none}
+  .skycopy{padding-right:18px;min-height:500px}
   .grid,.facts{grid-template-columns:1fr}
   .award{grid-template-columns:1fr}
-  nav{display:none}
+  .bar{row-gap:6px;padding-block:10px}
+  nav{gap:14px}
+  nav a{font-size:10px}
+  body{padding-bottom:84px}
+  .music{padding:10px}
+  .music #mlabel{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 }
 @media (prefers-reduced-motion:reduce){.ticker span{animation:none}}
 </style>
@@ -378,7 +384,7 @@ html.locked{overflow:hidden}
   </div>
 </div>
 
-<button class="music" id="music" type="button" aria-pressed="false"><span class="eq" aria-hidden="true"><i></i><i></i><i></i></span><span id="mlabel">Music off</span></button>
+<button class="music" id="music" type="button" aria-pressed="false"><span aria-hidden="true">♪</span><span class="eq" aria-hidden="true"><i></i><i></i><i></i></span><span id="mlabel">Music off</span></button>
 
 <script>
 (()=>{
@@ -560,7 +566,9 @@ function pipGlitch(g,c,w,h,I,seed,d){
     else g.drawImage(c,Math.floor(r()*w*d),Math.floor(r()*h*d),Math.max(1,cw*d),Math.max(1,ch*d),bx,by,cw,ch)}
 }
 function pipText(g,w,h,lines,el,seed){
-  const fs=Math.round(w*.16),r=rng(seed);let wi=0;
+  let fs=Math.round(w*.16);const r=rng(seed);let wi=0;
+  g.font='600 '+fs+'px "Inter Tight",Arial,sans-serif';
+  {const wd=Math.max(...lines.map(l=>g.measureText(l).width));if(wd>w*.86)fs=Math.floor(fs*w*.86/wd)}
   lines.forEach((ln,li)=>{
     const small=/^[(+]/.test(ln),size=small?Math.round(fs*.55):fs;g.font='600 '+size+'px "Inter Tight",Arial,sans-serif';
     const y=h*.4+li*fs*1.02;let x=w*.07;
@@ -680,7 +688,7 @@ function draw(){
   if(!RM||live)skyT+=dt*(.03+rms*.3);
   if(frame%2===0||cv.sky.fresh)renderSky(bassE);
   {const o=cv.sky,g=o.g;g.imageSmoothingEnabled=true;g.imageSmoothingQuality='high';g.drawImage(sky,0,0,o.w,o.h);o.fresh=false;
-    const bx=o.w*(.72+.12*Math.sin(t*.19)),by=o.h*(.3+.1*Math.cos(t*.15)),bs=20+bassE*14;
+    const narrow=o.w<520,bx=o.w*((narrow?.3:.72)+(narrow?.08:.12)*Math.sin(t*.19)),by=o.h*((narrow?.4:.3)+.04*Math.cos(t*.15)),bs=(narrow?14:20)+bassE*14;
     g.strokeStyle='rgba(255,255,255,.85)';g.lineWidth=1;g.strokeRect(bx-bs,by-bs,bs*2,bs*2);
     [[-1,0],[1,0],[0,-1],[0,1]].forEach(([dx,dy])=>hair(g,bx+dx*bs,by+dy*bs,bx+dx*(bs+9),by+dy*(bs+9),'#fff'));
     g.fillStyle='rgba(255,255,255,.95)';g.font='9px '+FONT;g.fillText('TRK '+String(Math.round(bx)).padStart(3,'0')+'.'+String(Math.round(by)).padStart(3,'0'),bx+bs+5,by-bs+9)}
@@ -749,7 +757,7 @@ function draw(){
       g.strokeStyle=C.navy;g.beginPath();g.arc(cx,cy,R*.22,0,6.283);g.stroke();g.fillStyle=C.navy;g.beginPath();g.arc(cx,cy,3,0,6.283);g.fill()}
     else if(ty==='db'){const N=44,bw=(o.w-24)/N;for(let i=0;i<N;i++){const v=live?(fb[2+i*6]/255):(.35+.25*Math.sin(i*.6+t*1.4)*Math.sin(i*.23+t*.7)+.1*Math.sin(t*5+i));
         const h=Math.max(2,v*(o.h*.55));g.fillStyle=v>.72?'#d1453b':i%6===0?C.blue:C.navy;g.globalAlpha=.85;g.fillRect(12+i*bw,o.h-10-h,bw-1.5,h)}g.globalAlpha=1;
-      hair(g,12,o.h*.38,o.w-12,o.h*.38,'#d1453b',.6)}
+      hair(g,12,o.h*.47,o.w-12,o.h*.47,'#d1453b',.6)}
     else if(ty==='tv'){const cols=['#e9eef3','#3a9f9b','#2e6bd1','#1b2940','#c6d0db','#7a889b','#f6f8fa'],bw=(o.w-24)/7;
       cols.forEach((c,i)=>{g.fillStyle=c;g.fillRect(12+i*bw,30,bw,o.h-70)});g.strokeStyle=C.line;g.strokeRect(12,30,o.w-24,o.h-70);
       for(let i=0;i<7;i++){g.fillStyle=i%2?C.navy:C.hl;g.fillRect(12+i*bw,o.h-38,bw,10)}
@@ -760,7 +768,7 @@ function draw(){
   });
 
   /* medal */
-  if(frame===0||cv.medal.fresh){const o=cv.medal,g=o.g;clear(o);const cx=o.w/2,cy=o.h/2,R=Math.min(o.w,o.h)*.45;
+  if(frame%30===0||cv.medal.fresh){const o=cv.medal,g=o.g;clear(o);const cx=o.w/2,cy=o.h/2,R=Math.min(o.w,o.h)*.45;
     g.strokeStyle=C.navy;g.beginPath();g.arc(cx,cy,R,0,6.283);g.stroke();
     for(let i=0;i<36;i++){const a=i/36*6.283;hair(g,cx+Math.cos(a)*R*.86,cy+Math.sin(a)*R*.86,cx+Math.cos(a)*R*.94,cy+Math.sin(a)*R*.94,C.blue,.8)}
     g.fillStyle=C.navy;g.font='500 '+Math.round(R*.7)+'px '+FONT;g.textAlign='center';g.textBaseline='middle';g.fillText('1st',cx,cy-2);
