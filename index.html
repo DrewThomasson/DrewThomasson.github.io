@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="description" content="Drew Thomasson builds open-source AI and media tools used by thousands of people.">
-  <meta name="theme-color" content="#f1ff54">
+  <meta name="theme-color" content="#e9eef3">
   <meta property="og:title" content="Drew Thomasson | Open-source builder">
   <meta property="og:description" content="AI, media pipelines, and useful software, with 19,000+ GitHub stars.">
   <meta property="og:type" content="website">
@@ -24,440 +24,532 @@
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <script src="script.js" defer></script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box}
+    :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+    body{margin:0}
+    img,video{max-width:100%}
+    [hidden]{display:none!important}
+    html{scroll-behavior:smooth}
+  </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@300;400;500;600&display=swap">
+<style>
+/* Layout: the whole portfolio as one instrument panel. Hairline modules on pale sky paper; each project is a module with its own live readout. Single light look by choice. */
+:root{
+  --paper:#e9eef3; --panel:#f6f8fa; --line:#c6d0db; --ink:#24334a; --mute:#7a889b; --teal:#3a9f9b; --blue:#2e6bd1; --navy:#1b2940; --hl:#ffffff;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --sans:"Inter Tight","Helvetica Neue",Arial,sans-serif;
+  color-scheme:light;
+}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px}
+a{color:inherit}
+.wrap{max-width:1080px;margin:0 auto;display:grid;gap:10px}
+.mono,.lbl,.chip,.k,nav a,.btn{font-family:var(--mono)}
+/* top bar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--paper);border-bottom:1px solid var(--line);
+  display:flex;justify-content:space-between;align-items:center;gap:12px;padding-block:12px;flex-wrap:wrap}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--paper)}
+.brand{font-weight:300;font-size:19px;letter-spacing:.38em;color:var(--navy)}
+nav{display:flex;gap:16px;flex-wrap:wrap}
+nav a{font-size:11px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:var(--mute)}
+nav a:hover,nav a:focus-visible{color:var(--blue)}
+.panel{background:var(--panel);border:1px solid var(--line);position:relative;min-width:0}
+.lbl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);display:flex;justify-content:space-between;gap:8px;padding:6px 8px 0}
+.lbl b{color:var(--blue);font-weight:500}
+canvas{display:block;width:100%;height:100%}
+h1,h2,h3{font-family:var(--sans);text-wrap:balance;margin:0;color:var(--navy)}
+h1{font-weight:300;font-size:clamp(30px,5.2vw,54px);line-height:1.02;letter-spacing:-.02em}
+h2{font-weight:300;font-size:clamp(24px,3.4vw,34px);line-height:1.1;letter-spacing:-.01em}
+h3{font-weight:500;font-size:19px}
+p{margin:0;max-width:62ch}
+.sec{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;padding-top:34px;padding-bottom:4px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.sec .mono{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+/* hero */
+.hero{display:grid;grid-template-columns:1.7fr 1fr;gap:10px;padding-top:10px}
+.sky{min-height:380px;overflow:hidden}
+.sky canvas{position:absolute;inset:0}
+.skycopy{position:relative;z-index:2;display:flex;flex-direction:column;justify-content:flex-end;gap:14px;height:100%;min-height:380px;padding:18px;color:var(--hl)}
+.skycopy h1{color:var(--hl);text-shadow:0 1px 18px rgba(27,41,64,.25)}
+.skycopy p{color:var(--hl);text-shadow:0 1px 10px rgba(27,41,64,.35)}
+.skytop{position:absolute;top:10px;left:12px;right:12px;display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;z-index:2}
+.dot{display:inline-block;width:6px;height:6px;background:#7df0c6;border-radius:50%;margin-right:6px;vertical-align:1px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:9px 14px;border:1px solid var(--navy);background:var(--navy);color:var(--hl);text-decoration:none;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--navy)}
+.skycopy .btn.ghost{color:var(--hl);border-color:rgba(255,255,255,.8)}
+.btn:focus-visible,.pbtn:focus-visible,a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.side{display:grid;gap:10px;grid-template-rows:auto 1fr}
+.stars{padding-bottom:8px}
+.big{font-family:var(--mono);font-size:clamp(30px,4vw,42px);color:var(--navy);padding:4px 8px 0;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.mtn{height:92px}
+.kv{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);margin-top:6px}
+.kv div{padding:6px 8px;border-right:1px solid var(--line)}
+.kv div:last-child{border-right:0}
+.k{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.v{font-family:var(--mono);font-size:16px;color:var(--navy);font-variant-numeric:tabular-nums}
+.power{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.power .cell{height:110px}
+.power .ctrl{grid-column:1/-1;border-top:1px solid var(--line);padding:8px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.status{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal)}
+/* signal strip */
+.strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.strip .panel{height:96px}
+.ticker{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);overflow:hidden;white-space:nowrap;border-block:1px solid var(--line);padding-block:7px}
+.ticker span{display:inline-block;animation:tick 40s linear infinite}
+@keyframes tick{to{transform:translateX(-50%)}}
+/* work */
+.flag{display:grid;grid-template-columns:1.1fr 1fr;gap:0}
+.flag .copy{padding:14px;display:grid;gap:12px;align-content:start;border-right:1px solid var(--line)}
+.term{font-family:var(--mono);font-size:12.5px;padding:14px;background:var(--navy);color:#cfe3f7;line-height:1.9;min-width:0;overflow-x:auto}
+.term .ok{color:#7df0c6}.term .dim{color:#7f93ad}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--line);padding:2px 6px;color:var(--ink);background:var(--hl)}
+.meta{font-family:var(--mono);font-size:11px;color:var(--mute);letter-spacing:.06em}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.card{display:grid;grid-template-rows:auto 150px 1fr}
+.card .viz{border-block:1px solid var(--line);position:relative;overflow:hidden;margin-top:6px}
+.card .body{padding:12px;display:grid;gap:10px;align-content:start}
+.card p{font-size:14px;color:var(--ink)}
+.go{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:var(--blue)}
+.mini{position:absolute;inset:0;padding:12px;font-family:var(--mono);font-size:11px;color:var(--ink);display:grid;align-content:center;gap:5px}
+.mini .sel{color:var(--blue)}
+.searchbox{border:1px solid var(--line);background:var(--hl);padding:6px 8px;color:var(--mute)}
+.overlay{position:absolute;left:12px;top:10px;font-family:var(--mono);color:var(--navy);z-index:2}
+.overlay .db{font-size:34px;line-height:1}
+.overlay .rec{font-size:10px;letter-spacing:.14em;color:#d1453b}
+/* voice lab */
+.lab{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.spectro{height:170px;grid-column:1/-1}
+.ab{display:grid;gap:8px;padding:0 0 12px}
+.ab .head{padding:8px 12px 0;display:grid;gap:4px}
+.ab p{font-size:14px}
+.track{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:0 12px}
+.pbtn{font-family:var(--mono);font-size:11px;width:34px;height:34px;border:1px solid var(--navy);background:var(--hl);color:var(--navy);cursor:pointer}
+.pbtn.on{background:var(--blue);border-color:var(--blue);color:var(--hl)}
+.tw{height:34px;border:1px solid var(--line);background:var(--hl);position:relative}
+.tw canvas{position:absolute;inset:0}
+.tname{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);white-space:nowrap}
+.pipe{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:stretch;gap:8px}
+.stage{padding:12px;display:grid;gap:6px}
+.stage .n{font-family:var(--mono);font-size:22px;color:var(--blue)}
+.arrow{display:grid;place-items:center;font-family:var(--mono);color:var(--mute)}
+.fine{font-size:12px;color:var(--mute);max-width:80ch}
+/* about */
+.about{display:grid;grid-template-columns:1.3fr 1fr;gap:10px}
+.about .txt{padding:16px;display:grid;gap:12px}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fact{padding:10px 12px;display:grid;gap:2px;align-content:start}
+.fact b{font-weight:500;color:var(--navy)}
+.award{display:grid;grid-template-columns:auto 1fr;gap:16px;padding:14px;align-items:center}
+.medal{width:96px;height:96px}
+.contact{padding:22px 16px;display:grid;gap:14px;text-align:left}
+.email{font-family:var(--mono);font-size:clamp(15px,2.4vw,22px);color:var(--navy);user-select:all;word-break:break-all}
+@media (max-width:860px){
+  .hero,.flag,.about,.lab{grid-template-columns:1fr}
+  .flag .copy{border-right:0;border-bottom:1px solid var(--line)}
+  .grid{grid-template-columns:1fr 1fr}
+  .strip{grid-template-columns:1fr 1fr}
+  .pipe{grid-template-columns:1fr}.arrow{transform:rotate(90deg);height:18px}
+}
+@media (max-width:560px){
+  .grid,.facts{grid-template-columns:1fr}
+  .award{grid-template-columns:1fr}
+  nav{display:none}
+}
+@media (prefers-reduced-motion:reduce){.ticker span{animation:none}}
+</style>
 </head>
 <body>
-  <div class="noise" aria-hidden="true"></div>
-  <header class="site-header">
-    <a class="wordmark" href="#top" aria-label="Drew Thomasson, home">
-      <span class="wordmark-mark">DT</span>
-      <span>Drew Thomasson</span>
-    </a>
-    <nav aria-label="Primary navigation">
-      <a href="#work">Work</a>
-      <a href="#e2a-demos">Demos</a>
-      <a href="#about">About</a>
-      <a class="nav-cta" href="mailto:ebook2audiobook@gmail.com">Let’s talk <span>↗</span></a>
-    </nav>
+
+<div class="wrap">
+  <header class="bar">
+    <div class="brand">DREW · ORBIT</div>
+    <nav><a href="#work">Work</a><a href="#lab">Voice lab</a><a href="#about">About</a><a href="#contact">Contact</a></nav>
   </header>
 
-  <main id="top">
-    <section class="hero">
-      <div class="hero-copy reveal">
-        <p class="eyebrow"><span class="status-dot"></span> Open to interesting work</p>
-        <h1>I build software people <em>actually use.</em></h1>
-        <p class="hero-intro">
-          I’m Drew, an open-source developer working where AI, audio, and useful
-          tools meet. My projects turn difficult technical workflows into products
-          anyone can run.
-        </p>
-        <div class="hero-actions">
-          <a class="button button-dark" href="#work">Explore my work <span>↓</span></a>
-          <a class="text-link" href="https://github.com/DrewThomasson" target="_blank" rel="noreferrer">GitHub ↗</a>
-          <a class="text-link" href="https://www.twitch.tv/athomasson2" target="_blank" rel="noreferrer">Twitch ↗</a>
-          <a class="text-link" href="https://www.youtube.com/@AT-tech-tips" target="_blank" rel="noreferrer">YouTube ↗</a>
+  <section class="hero" id="top">
+    <div class="panel sky">
+      <canvas id="sky"></canvas>
+      <div class="skytop"><span><i class="dot"></i>open to interesting work</span><span id="alt">atl · 33.75° n</span></div>
+      <div class="skycopy">
+        <h1>I build software<br>people actually use.</h1>
+        <p>I’m Drew, an open-source developer working where AI, audio, and useful tools meet. My projects turn difficult technical workflows into products anyone can run.</p>
+        <div class="row">
+          <a class="btn" href="#work">Explore my work ↓</a>
+          <a class="btn ghost" href="https://github.com/DrewThomasson">GitHub ↗</a>
+          <a class="btn ghost" href="https://www.twitch.tv/athomasson2">Twitch ↗</a>
+          <a class="btn ghost" href="https://www.youtube.com/@AT-tech-tips">YouTube ↗</a>
         </div>
       </div>
-      <aside class="impact-card reveal" aria-label="Open-source impact">
-        <div class="impact-top">
-          <span>Open-source impact</span>
-          <span class="live-label">LIVE</span>
-        </div>
-        <strong class="big-number" data-count="19500">19,500+</strong>
-        <span class="metric-label">GitHub stars earned</span>
-        <div class="sparkline" aria-hidden="true">
-          <svg viewBox="0 0 420 116" preserveAspectRatio="none">
-            <path class="spark-fill" d="M0 108 C58 106,74 95,110 98 S169 80,200 82 S253 66,276 64 S319 38,344 45 S388 15,420 8 L420 116 L0 116 Z"/>
-            <path class="spark-stroke" d="M0 108 C58 106,74 95,110 98 S169 80,200 82 S253 66,276 64 S319 38,344 45 S388 15,420 8"/>
-          </svg>
-        </div>
-        <div class="impact-stats">
-          <div><strong>1.6k+</strong><span>forks</span></div>
-          <div><strong>70</strong><span>public repos</span></div>
-          <div><strong>335+</strong><span>followers</span></div>
-        </div>
-      </aside>
-    </section>
-
-    <section class="marquee" aria-label="Skills">
-      <div class="marquee-track">
-        <span>Python</span><i>✳</i><span>Applied AI</span><i>✳</i><span>Audio systems</span><i>✳</i>
-        <span>Docker</span><i>✳</i><span>Go</span><i>✳</i><span>Open source</span><i>✳</i>
-        <span>Python</span><i>✳</i><span>Applied AI</span><i>✳</i><span>Audio systems</span><i>✳</i>
-        <span>Docker</span><i>✳</i><span>Go</span><i>✳</i><span>Open source</span><i>✳</i>
+    </div>
+    <div class="side">
+      <div class="panel stars">
+        <div class="lbl">open-source impact <b>live</b></div>
+        <div class="big">19,500+</div>
+        <div class="meta" style="padding:0 8px">GitHub stars earned</div>
+        <div class="mtn"><canvas id="mtn"></canvas></div>
+        <div class="kv"><div><div class="k">forks</div><div class="v">1.6k+</div></div><div><div class="k">repos</div><div class="v">70</div></div><div><div class="k">followers</div><div class="v">335+</div></div></div>
       </div>
-    </section>
-
-    <section class="work-section" id="work">
-      <div class="section-heading reveal">
-        <div>
-          <p class="eyebrow">Selected work / 01 to 06</p>
-          <h2>Built from curiosity.<br>Shipped with care.</h2>
-        </div>
-        <p>Products spanning generative audio, local AI, media infrastructure, developer tools, and delightfully specific problems.</p>
+      <div class="panel power">
+        <div class="cell"><div class="lbl">particle</div><canvas id="orb" style="height:88px"></canvas></div>
+        <div class="cell" style="border-left:1px solid var(--line)"><div class="lbl">deg <b id="deg">1</b></div><canvas id="dial" style="height:88px"></canvas></div>
+        <div class="ctrl"><span class="status" id="stat">standby</span><button class="btn" id="power" type="button">▶ Power on</button></div>
       </div>
+    </div>
+  </section>
 
-      <article class="featured-project project-card reveal">
-        <div class="project-visual e2a-visual">
-          <div class="terminal">
-            <div class="terminal-bar"><i></i><i></i><i></i><span>ebook2audiobook</span></div>
-            <div class="terminal-body">
-              <span class="prompt">$</span> e2a convert novel.epub<br>
-              <span class="dim">→ Detecting chapters</span><br>
-              <span class="dim">→ Loading multilingual voice</span><br>
-              <span class="success">✓ Audiobook ready</span>
-              <div class="audio-bars" aria-hidden="true">
-                <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="project-copy">
-          <div class="project-meta"><span>Flagship project</span><span>2024 to now</span></div>
-          <h3>ebook2audiobook</h3>
-          <p>Turn ebooks into fully chaptered audiobooks with voice cloning and support for 1,704 languages, all running locally on CPU or GPU.</p>
-          <ul class="tag-list" aria-label="Technologies">
-            <li>Python</li><li>Generative AI</li><li>Docker</li><li>Gradio</li>
-          </ul>
-          <div class="project-proof"><strong>19.5k</strong> stars <span>•</span> <strong>1.6k</strong> forks</div>
-          <div class="project-links">
-            <a class="project-link" href="#e2a-demos">Hear the demos <span>↓</span></a>
-            <a class="project-link project-link-muted" href="https://github.com/DrewThomasson/ebook2audiobook" target="_blank" rel="noreferrer">View project <span>↗</span></a>
-          </div>
-        </div>
-      </article>
+  <section class="strip" aria-label="Live audio readouts">
+    <div class="panel"><div class="lbl">waveform <b id="src">intro</b></div><canvas id="wave" style="height:74px"></canvas></div>
+    <div class="panel"><div class="lbl">scope</div><canvas id="scope" style="height:74px"></canvas></div>
+    <div class="panel"><div class="lbl">spectrum</div><canvas id="spec" style="height:74px"></canvas></div>
+    <div class="panel"><div class="lbl">vector</div><canvas id="vec" style="height:74px"></canvas></div>
+  </section>
 
-      <section class="e2a-demos reveal" id="e2a-demos" aria-labelledby="e2a-demos-title">
-        <div class="demo-intro">
-          <div>
-            <p class="eyebrow">Hear the output</p>
-            <h3 id="e2a-demos-title">Books become voices.</h3>
-          </div>
-          <p>
-            Real samples generated with ebook2audiobook, from the default narrator
-            to cloned, fine-tuned, and multi-character voices. Press play to hear the finished result.
-          </p>
-        </div>
+  <div class="ticker" aria-hidden="true"><span>python ✳ applied ai ✳ audio systems ✳ docker ✳ go ✳ open source ✳ python ✳ applied ai ✳ audio systems ✳ docker ✳ go ✳ open source ✳&nbsp;</span><span>python ✳ applied ai ✳ audio systems ✳ docker ✳ go ✳ open source ✳ python ✳ applied ai ✳ audio systems ✳ docker ✳ go ✳ open source ✳&nbsp;</span></div>
 
-        <div class="demo-grid">
-          <article class="demo-card demo-card-featured">
-            <div class="demo-card-copy">
-              <span>Featured demo / Default narrator</span>
-              <h4>New default voice</h4>
-              <p>A longer-form sample of the voice included out of the box.</p>
-            </div>
-            <video controls preload="metadata" playsinline src="assets/demos/default-voice.mp4">
-              <a href="assets/demos/default-voice.mp4">Download the default voice demo</a>
-            </video>
-          </article>
+  <div class="sec" id="work"><h2>Built from curiosity.<br>Shipped with care.</h2><span class="mono">selected work · 7 modules</span></div>
 
-          <article class="demo-card">
-            <div class="demo-card-copy">
-              <span>Voice demo / ASMR</span>
-              <h4>Whispered narration</h4>
-            </div>
-            <video controls preload="metadata" playsinline src="assets/demos/asmr-voice.mp4">
-              <a href="assets/demos/asmr-voice.mp4">Download the ASMR voice demo</a>
-            </video>
-          </article>
+  <article class="panel flag">
+    <div class="copy">
+      <div class="lbl" style="padding:0">flagship · 2024 to now <b>19.5k ★ · 1.6k forks</b></div>
+      <h3 style="font-size:26px;font-weight:400">ebook2audiobook</h3>
+      <p>Turn ebooks into fully chaptered audiobooks with voice cloning and support for 1,704 languages, all running locally on CPU or GPU.</p>
+      <div class="chips"><span class="chip">python</span><span class="chip">generative ai</span><span class="chip">docker</span><span class="chip">gradio</span></div>
+      <div class="row"><a class="btn" href="#lab">Hear the demos ↓</a><a class="btn ghost" href="https://github.com/DrewThomasson/ebook2audiobook">View project ↗</a></div>
+    </div>
+    <div class="term" id="term"><span class="dim">$</span> e2a convert novel.epub<br><span class="dim">→</span> Detecting chapters<br><span class="dim">→</span> Loading multilingual voice<br><span class="ok">✓ Audiobook ready</span></div>
+  </article>
 
-          <article class="demo-card">
-            <div class="demo-card-copy">
-              <span>Voice demo / Naturalist</span>
-              <h4>Documentary narration</h4>
-            </div>
-            <video controls preload="metadata" playsinline src="assets/demos/naturalist-voice.mp4">
-              <a href="assets/demos/naturalist-voice.mp4">Download the naturalist voice demo</a>
-            </video>
-          </article>
+  <div class="grid">
+    <article class="panel card">
+      <div class="lbl">media tooling <b>2026</b></div>
+      <div class="viz"><canvas data-viz="disc"></canvas><div class="overlay"><div class="meta">YOUR LIBRARY. ON A DISC.</div></div></div>
+      <div class="body"><h3>JellyDisk</h3><p>A desktop app and CLI that turns Jellyfin libraries into polished DVD sets: menus, subtitles, disc splitting, artwork and all.</p>
+        <div class="chips"><span class="chip">python</span><span class="chip">ffmpeg</span><span class="chip">docker</span><span class="chip">testing</span></div>
+        <a class="go" href="https://github.com/DrewThomasson/JellyDisk">View project ↗</a></div>
+    </article>
+    <article class="panel card">
+      <div class="lbl">civic data <b>2025</b></div>
+      <div class="viz"><canvas data-viz="db"></canvas><div class="overlay"><div class="db" id="dbv">82 dB</div><div class="rec">● RECORDING · STREET NOISE</div></div></div>
+      <div class="body"><h3>Sound Monitor</h3><p>A desktop noise-evidence system that detects loud and low-frequency events, captures audio and video, and logs calibrated measurements for reporting to local authorities.</p>
+        <div class="chips"><span class="chip">python</span><span class="chip">pyaudio</span><span class="chip">fft</span><span class="chip">sqlite</span></div>
+        <a class="go" href="https://github.com/DrewThomasson/sound-monitor">View project ↗</a></div>
+    </article>
+    <article class="panel card">
+      <div class="lbl">local ai search <b>2024</b></div>
+      <div class="viz"><div class="mini"><div class="searchbox">⌕ Search everything you watched…</div><div><span class="sel">01:42:18</span> “…the exact moment you were looking for.”</div><div><span class="sel">03:17</span> Semantic match across your library</div></div></div>
+      <div class="body"><h3>offlineYoutube</h3><p>Download, transcribe, and semantically search entire video libraries locally using Whisper, FAISS, and embeddings.</p>
+        <div class="chips"><span class="chip">whisper</span><span class="chip">faiss</span><span class="chip">pypi</span></div>
+        <a class="go" href="https://github.com/DrewThomasson/offlineYoutube">View project ↗</a></div>
+    </article>
+    <article class="panel card">
+      <div class="lbl">developer tool <b>2026</b></div>
+      <div class="viz"><div class="mini"><div class="meta">♪ itunespull · playlists</div><div class="sel">› Favorites</div><div>&nbsp;&nbsp;Recently Added</div><div>&nbsp;&nbsp;Most Played</div><div class="meta">▶ 03:24 ━━━━━━━╸ 04:03</div></div></div>
+      <div class="body"><h3>itunespull</h3><p>A Go-powered terminal music player that browses, streams, and syncs a remote Apple Music library over SSH.</p>
+        <div class="chips"><span class="chip">go</span><span class="chip">bubble tea</span><span class="chip">ssh</span><span class="chip">homebrew</span></div>
+        <a class="go" href="https://github.com/DrewThomasson/itunespull">View project ↗</a></div>
+    </article>
+    <article class="panel card">
+      <div class="lbl">full-stack media <b>2025</b></div>
+      <div class="viz"><canvas data-viz="tv"></canvas><div class="overlay"><div class="meta" style="color:var(--navy)">YOU’RE WATCHING · THE 90s</div></div></div>
+      <div class="body"><h3>JellyfinTV</h3><p>Turns a Jellyfin library into always-on virtual TV channels with intelligent scheduling, filters, and era-appropriate ads.</p>
+        <div class="chips"><span class="chip">fastapi</span><span class="chip">docker</span><span class="chip">scheduling</span></div>
+        <a class="go" href="https://github.com/DrewThomasson/JellyfinTV">View project ↗</a></div>
+    </article>
+    <article class="panel card">
+      <div class="lbl">legacy project <b>2023 to 2024</b></div>
+      <div class="viz"><canvas data-viz="voices"></canvas><div class="overlay"><div class="meta">THE IDEA LIVES ON IN E2A-SML</div></div></div>
+      <div class="body"><h3>VoxNovel</h3><p>The original multi-character audiobook project: it detected characters, attributed dialogue, and assigned distinct voices automatically. Its successor now lives inside ebook2audiobook as E2A-SML.</p>
+        <div class="meta">373 ★ · 57 forks</div>
+        <div class="row" style="gap:14px"><a class="go" href="https://github.com/DrewThomasson/ebook2audiobook/tree/main/components/E2A-SML">Explore E2A-SML ↗</a><a class="go" href="https://github.com/DrewThomasson/VoxNovel">Legacy repo ↗</a></div></div>
+    </article>
+  </div>
 
-          <article class="demo-card demo-card-comparison">
-            <div class="demo-card-copy">
-              <span>E2A-SML / Same story, two outputs</span>
-              <h4>The Lighthouse Signal</h4>
-              <p>Compare a standard single-narrator conversion with automatic narrator and character voice assignment from E2A-SML.</p>
-            </div>
-            <div class="demo-audio-comparison">
-              <label>
-                <span><b>A</b> Standard / one narrator</span>
-                <audio controls preload="metadata" src="assets/demos/lighthouse-standard.mp3"></audio>
-              </label>
-              <label>
-                <span><b>B</b> E2A-SML / narrator + three characters</span>
-                <audio controls preload="metadata" src="assets/demos/lighthouse-e2a-sml.mp3"></audio>
-              </label>
-            </div>
-          </article>
-        </div>
+  <div class="sec" id="lab"><h2>Books become voices.</h2><span class="mono">voice lab · real ebook2audiobook output</span></div>
+  <div class="lab">
+    <div class="panel spectro"><div class="lbl">spectrogram <b id="now">idle · press a play button</b></div><canvas id="spectro" style="height:146px"></canvas></div>
 
-        <p class="demo-note">Generated voice demonstrations are presented for technical comparison. They are not affiliated with or endorsed by any person whose vocal characteristics inspired a sample.</p>
-      </section>
+    <div class="panel ab" style="grid-column:1/-1">
+      <div class="head"><div class="lbl" style="padding:0">e2a-sml · same story, two outputs</div><h3>The Lighthouse Signal</h3>
+        <p>Compare a standard single-narrator conversion with automatic narrator and character voice assignment from E2A-SML.</p></div>
+      <div class="track"><button class="pbtn" type="button" data-src="assets/demos/lighthouse-standard.mp3" data-name="lighthouse · standard" aria-label="Play standard narrator">A</button><div class="tw"><canvas></canvas></div><span class="tname">one narrator</span></div>
+      <div class="track"><button class="pbtn" type="button" data-src="assets/demos/lighthouse-e2a-sml.mp3" data-name="lighthouse · e2a-sml" aria-label="Play E2A-SML version">B</button><div class="tw"><canvas></canvas></div><span class="tname">narrator + 3 characters</span></div>
+    </div>
 
-      <section class="e2a-lab reveal" aria-labelledby="e2a-lab-title">
-        <div class="lab-intro">
-          <div>
-            <p class="eyebrow">Inside the E2A ecosystem</p>
-            <h3 id="e2a-lab-title">From five seconds of voice<br>to a deployable model.</h3>
-          </div>
-          <p>
-            I built a synthetic-data-assisted training pipeline around the Universal
-            TTS Finetuner: clone a voice from a few seconds of reference audio,
-            generate hours of clean teacher data with XTTS, then train a compact
-            Piper model that runs faster and on far less hardware.
-          </p>
-        </div>
+    <div class="panel ab">
+      <div class="head"><div class="lbl" style="padding:0">experiment a</div><h3>Whispered voice</h3><p>Preserving an unusually quiet vocal style through a compact model.</p></div>
+      <div class="track"><button class="pbtn" type="button" data-src="assets/audio/whisper-teacher.mp3" data-name="whisper · xtts teacher" aria-label="Play XTTS teacher data">A</button><div class="tw"><canvas></canvas></div><span class="tname">xtts teacher</span></div>
+      <div class="track"><button class="pbtn" type="button" data-src="assets/audio/whisper-piper.mp3" data-name="whisper · piper model" aria-label="Play trained Piper model">B</button><div class="tw"><canvas></canvas></div><span class="tname">piper model</span></div>
+    </div>
+    <div class="panel ab">
+      <div class="head"><div class="lbl" style="padding:0">experiment b</div><h3>Naturalist narration</h3><p>A recognizable narration style transferred into a lightweight runtime.</p></div>
+      <div class="track"><button class="pbtn" type="button" data-src="assets/audio/naturalist-teacher.mp3" data-name="naturalist · xtts teacher" aria-label="Play XTTS teacher data">A</button><div class="tw"><canvas></canvas></div><span class="tname">xtts teacher</span></div>
+      <div class="track"><button class="pbtn" type="button" data-src="assets/audio/naturalist-piper.mp3" data-name="naturalist · piper model" aria-label="Play trained Piper model">B</button><div class="tw"><canvas></canvas></div><span class="tname">piper model</span></div>
+    </div>
+  </div>
 
-        <div class="lab-flow" aria-label="Voice model training workflow">
-          <div><span>01</span><strong>Few-shot reference</strong><small>~5 seconds of source voice</small></div>
-          <i>→</i>
-          <div><span>02</span><strong>Synthetic dataset</strong><small>~5 hours generated by XTTS</small></div>
-          <i>→</i>
-          <div><span>03</span><strong>Compact deployment</strong><small>A fast, lightweight Piper voice</small></div>
-        </div>
+  <div class="sec"><h2>From five seconds of voice<br>to a deployable model.</h2><span class="mono">signal chain · universal tts finetuner</span></div>
+  <div class="pipe">
+    <div class="panel stage"><span class="n">01</span><b>Few-shot reference</b><span class="meta">~5 seconds of source voice</span></div>
+    <div class="arrow">→</div>
+    <div class="panel stage"><span class="n">02</span><b>Synthetic dataset</b><span class="meta">~5 hours generated by XTTS</span></div>
+    <div class="arrow">→</div>
+    <div class="panel stage"><span class="n">03</span><b>Compact deployment</b><span class="meta">A fast, lightweight Piper voice</span></div>
+  </div>
+  <div class="row" style="gap:18px"><a class="go" href="https://github.com/DrewThomasson/ebook2audiobook/tree/main/components/Universal_TTS_Finetune">Explore the finetuner ↗</a><a class="go" href="https://github.com/DrewThomasson/ebook2audiobook/tree/main/components/E2A-SML">Explore E2A-SML ↗</a></div>
+  <p class="fine">Research demonstration. Generated voices are presented for technical comparison and are not affiliated with or endorsed by the people whose vocal characteristics inspired them.</p>
 
-        <div class="audio-comparisons">
-          <article class="comparison-card">
-            <div class="comparison-heading">
-              <div><span>Experiment A</span><h4>Whispered voice</h4></div>
-              <p>Preserving an unusually quiet vocal style through a compact model.</p>
-            </div>
-            <div class="audio-row">
-              <label>
-                <span><b>A</b> XTTS teacher data</span>
-                <audio controls preload="metadata" src="assets/audio/whisper-teacher.mp3"></audio>
-              </label>
-              <label>
-                <span><b>B</b> Trained Piper model</span>
-                <audio controls preload="metadata" src="assets/audio/whisper-piper.mp3"></audio>
-              </label>
-            </div>
-          </article>
+  <div class="sec" id="about"><h2>I like difficult problems<br>and simple interfaces.</h2><span class="mono">about · the short version</span></div>
+  <div class="about">
+    <div class="panel txt">
+      <p>My best work starts with “why is this still so hard?” and ends with a tool people can actually install.</p>
+      <p>I have experience with Gearbox and work in IT at Adult Swim while studying at Georgia State University, where I am also a member of the Alser Lab in the Department of Computer Science.</p>
+      <p>I build in public, listen to users, and follow projects past the prototype stage into packaging, documentation, releases, and long-term maintenance.</p>
+      <div class="chips"><span class="chip">ml pipelines</span><span class="chip">audio &amp; media</span><span class="chip">python &amp; go</span><span class="chip">cli &amp; desktop</span><span class="chip">docker</span><span class="chip">open source</span></div>
+    </div>
+    <div class="facts">
+      <div class="panel fact"><span class="k">industry</span><b>Adult Swim</b><span class="meta">Information technology</span></div>
+      <div class="panel fact"><span class="k">experience</span><b>Gearbox</b><a class="go" href="https://gearboxgo.com/">gearboxgo.com ↗</a></div>
+      <div class="panel fact"><span class="k">education</span><b>Georgia State University</b><span class="meta">Atlanta, Georgia</span></div>
+      <div class="panel fact"><span class="k">research</span><b>Alser Lab</b><a class="go" href="https://alserlab.github.io/index.html">Visit the lab ↗</a></div>
+    </div>
+  </div>
+  <div class="panel award">
+    <canvas class="medal" id="medal"></canvas>
+    <div style="display:grid;gap:8px"><div class="lbl" style="padding:0">recognition · ebook2audiobook</div><h3>Two honors from Georgia State.</h3>
+      <p>Ebook2audiobook earned 1st Place in Applied Research and Entrepreneurship for its poster presentation and a Global Engagement Award at the Georgia State Undergraduate Research Conference.</p>
+      <span class="meta">Project sponsor: Professor Mohammed Alser</span>
+      <a class="go" href="https://curci.gsu.edu/gsurc/#1775674136848-79edcb94-7e5e">View the official winners ↗</a></div>
+  </div>
 
-          <article class="comparison-card">
-            <div class="comparison-heading">
-              <div><span>Experiment B</span><h4>Naturalist narration</h4></div>
-              <p>A recognizable narration style transferred into a lightweight runtime.</p>
-            </div>
-            <div class="audio-row">
-              <label>
-                <span><b>A</b> XTTS teacher data</span>
-                <audio controls preload="metadata" src="assets/audio/naturalist-teacher.mp3"></audio>
-              </label>
-              <label>
-                <span><b>B</b> Trained Piper model</span>
-                <audio controls preload="metadata" src="assets/audio/naturalist-piper.mp3"></audio>
-              </label>
-            </div>
-          </article>
-        </div>
+  <div class="sec" id="contact"><h2>Let’s build something people want.</h2><span class="mono">have an interesting problem?</span></div>
+  <div class="panel contact">
+    <div class="email" id="email">ebook2audiobook@gmail.com</div>
+    <div class="row"><button class="btn" id="copy" type="button">Copy email</button>
+      <a class="btn ghost" href="https://github.com/DrewThomasson">GitHub ↗</a><a class="btn ghost" href="https://www.twitch.tv/athomasson2">Twitch ↗</a><a class="btn ghost" href="https://www.youtube.com/@AT-tech-tips">YouTube ↗</a><a class="btn ghost" href="https://ebook2audiobook.com">ebook2audiobook.com ↗</a></div>
+  </div>
+</div>
 
-        <div class="lab-tools">
-          <article>
-            <span class="tool-index">Tool / 01</span>
-            <h4>Universal TTS Finetuner</h4>
-            <p>A unified training environment for building and adapting speech models, including the teacher-to-Piper workflow demonstrated above.</p>
-            <a class="project-link" href="https://github.com/DrewThomasson/ebook2audiobook/tree/main/components/Universal_TTS_Finetune" target="_blank" rel="noreferrer">Explore the finetuner <span>↗</span></a>
-          </article>
-          <article>
-            <span class="tool-index">Tool / 02</span>
-            <h4>E2A-SML</h4>
-            <p>Analyzes books, attributes dialogue to characters, and produces voice-tagged SML for multi-speaker audiobook generation.</p>
-            <a class="project-link" href="https://github.com/DrewThomasson/ebook2audiobook/tree/main/components/E2A-SML" target="_blank" rel="noreferrer">Explore E2A-SML <span>↗</span></a>
-          </article>
-        </div>
+<script>
+(()=>{
+const $=id=>document.getElementById(id);
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const C={teal:'#3a9f9b',blue:'#2e6bd1',navy:'#1b2940',line:'#c6d0db',mute:'#7a889b',ink:'#24334a',hl:'#ffffff'};
+const FONT='"IBM Plex Mono",monospace';
 
-        <p class="audio-note">Research demonstration. Generated voices are presented for technical comparison and are not affiliated with or endorsed by the people whose vocal characteristics inspired them.</p>
-      </section>
+/* ---------- canvases ---------- */
+const all=[];
+function fit(o){const r=o.c.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);o.w=r.width;o.h=r.height;o.c.width=Math.max(1,Math.round(r.width*d));o.c.height=Math.max(1,Math.round(r.height*d));o.g.setTransform(d,0,0,d,0,0);o.fresh=true}
+function reg(c){const o={c,g:c.getContext('2d'),w:0,h:0};fit(o);if('ResizeObserver'in window)new ResizeObserver(()=>fit(o)).observe(c);all.push(o);return o}
+const cv={};['sky','mtn','orb','dial','wave','scope','spec','vec','spectro','medal'].forEach(id=>cv[id]=reg($(id)));
+const vizzes=[...document.querySelectorAll('canvas[data-viz]')].map(c=>({o:reg(c),t:c.dataset.viz}));
+const hair=(g,a,b,c,d,col,al=1)=>{g.globalAlpha=al;g.strokeStyle=col;g.lineWidth=1;g.beginPath();g.moveTo(a,b);g.lineTo(c,d);g.stroke();g.globalAlpha=1};
+const clear=o=>o.g.clearRect(0,0,o.w,o.h);
 
-      <div class="project-grid">
-        <article class="project-card reveal">
-          <div class="project-visual jellydisk-visual">
-            <div class="disc"></div>
-            <div class="case">
-              <span>JELLY</span>
-              <strong>DISK</strong>
-              <small>YOUR LIBRARY.<br>ON A DISC.</small>
-            </div>
-          </div>
-          <div class="project-copy">
-            <div class="project-meta"><span>Media tooling</span><span>2026</span></div>
-            <h3>JellyDisk</h3>
-            <p>A desktop app and CLI that turns Jellyfin libraries into polished DVD sets: menus, subtitles, disc splitting, artwork and all.</p>
-            <ul class="tag-list"><li>Python</li><li>FFmpeg</li><li>Docker</li><li>Testing</li></ul>
-            <a class="project-link" href="https://github.com/DrewThomasson/JellyDisk" target="_blank" rel="noreferrer">View project <span>↗</span></a>
-          </div>
-        </article>
+/* ---------- audio graph ---------- */
+let ac=null,bus,an,anL,anR,tb,fb,lb,rb;
+function initAudio(){
+  if(ac)return;
+  ac=new (window.AudioContext||window.webkitAudioContext)();
+  const master=ac.createGain();master.gain.value=.9;
+  const comp=ac.createDynamicsCompressor();comp.threshold.value=-14;comp.ratio.value=3;
+  bus=ac.createGain();
+  const dl=ac.createDelay(1),fbk=ac.createGain(),send=ac.createGain(),lp=ac.createBiquadFilter();
+  dl.delayTime.value=.47;fbk.gain.value=.3;send.gain.value=.2;lp.type='lowpass';lp.frequency.value=2600;
+  bus.connect(comp);bus.connect(send);send.connect(dl);dl.connect(lp);lp.connect(fbk);fbk.connect(dl);lp.connect(comp);
+  comp.connect(master);master.connect(ac.destination);
+  an=ac.createAnalyser();an.fftSize=2048;an.smoothingTimeConstant=.78;master.connect(an);
+  const sp=ac.createChannelSplitter(2);master.connect(sp);anL=ac.createAnalyser();anR=ac.createAnalyser();anL.fftSize=anR.fftSize=1024;sp.connect(anL,0);sp.connect(anR,1);
+  tb=new Float32Array(2048);fb=new Uint8Array(1024);lb=new Float32Array(1024);rb=new Float32Array(1024);
+  window.__master=master;
+}
+const hz=m=>440*Math.pow(2,(m-69)/12);
+function outp(p){const n=ac.createStereoPanner();n.pan.value=p;n.connect(bus);return n}
+function piano(t,m,d){const g=ac.createGain(),f=ac.createBiquadFilter(),o1=ac.createOscillator(),o2=ac.createOscillator(),g2=ac.createGain();
+  f.type='lowpass';f.frequency.value=3200;o1.type='triangle';o2.type='sine';o1.frequency.value=hz(m);o2.frequency.value=hz(m)*2.002;g2.gain.value=.35;
+  o1.connect(f);o2.connect(g2);g2.connect(f);f.connect(g);g.connect(outp(-.35));
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.13,t+.006);g.gain.exponentialRampToValueAtTime(.0001,t+Math.max(.9,d*2.2));
+  o1.start(t);o2.start(t);o1.stop(t+d*2.3+.9);o2.stop(t+d*2.3+.9)}
+function lead(t,m,d){const o=ac.createOscillator(),f=ac.createBiquadFilter(),g=ac.createGain(),l=ac.createOscillator(),lg=ac.createGain();
+  o.type='square';o.frequency.value=hz(m);f.type='lowpass';f.frequency.value=2100;f.Q.value=2;l.frequency.value=5.5;lg.gain.value=hz(m)*.006;l.connect(lg);lg.connect(o.frequency);
+  o.connect(f);f.connect(g);g.connect(outp(.35));const e=t+d;
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.05,t+.02);g.gain.setValueAtTime(.045,e);g.gain.exponentialRampToValueAtTime(.0001,e+.2);
+  o.start(t);l.start(t);o.stop(e+.22);l.stop(e+.22)}
+function bass(t,m,d){const o=ac.createOscillator(),g=ac.createGain();o.type='sine';o.frequency.value=hz(m);o.connect(g);g.connect(outp(0));
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.2,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.start(t);o.stop(t+d+.05)}
 
-        <article class="project-card reveal">
-          <div class="project-visual sound-visual">
-            <div class="sound-meter">
-              <div class="sound-reading"><strong>82</strong><span>dB</span></div>
-              <div class="sound-wave" aria-hidden="true">
-                <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-              </div>
-              <div class="sound-status"><span>Street noise detected</span><span>● Recording</span></div>
-            </div>
-          </div>
-          <div class="project-copy">
-            <div class="project-meta"><span>Civic data</span><span>2025</span></div>
-            <h3>Sound Monitor</h3>
-            <p>A desktop noise-evidence system that detects loud and low-frequency events, captures audio and video, and logs calibrated measurements for reporting to local authorities.</p>
-            <ul class="tag-list"><li>Python</li><li>PyAudio</li><li>FFT</li><li>SQLite</li></ul>
-            <a class="project-link" href="https://github.com/DrewThomasson/sound-monitor" target="_blank" rel="noreferrer">View project <span>↗</span></a>
-          </div>
-        </article>
+/* ---------- intro: an original 4-bar boot theme ---------- */
+const STEP=60/96/4;
+const PROG=[[50,54,57,61],[47,50,54,57],[43,47,50,54],[45,49,52,54]],DEG=[1,6,4,5],ARP=[0,1,2,3,2,1,2,3];
+const MEL=[[[0,78,2],[2,81,2],[4,83,4],[10,81,2],[12,78,4]],[[0,76,2],[2,78,2],[4,74,6],[12,71,4]],
+  [[0,74,2],[2,76,2],[4,78,2],[6,81,2],[8,79,2],[10,78,2],[12,76,4]],[[0,73,4],[4,76,4],[8,74,8]]];
+const BOOT=['standby','aligning modules','loading voice lab','calibrating sky','alignment complete'];
+let introStart=-1,introEnd=-1;
+function playIntro(){
+  initAudio();ac.resume();stopClip();
+  const t0=ac.currentTime+.06;introStart=t0;
+  for(let b=0;b<4;b++){const c=PROG[b];bass(t0+b*16*STEP,c[0]%12+36,16*STEP);
+    ARP.forEach((k,i)=>piano(t0+(b*16+i*2)*STEP,c[k]+12,2*STEP));
+    MEL[b].forEach(([s,m,l])=>lead(t0+(b*16+s)*STEP,m,l*STEP));}
+  piano(t0+64*STEP,62,2);piano(t0+64*STEP,69,2);piano(t0+64*STEP,74,2);
+  introEnd=t0+64*STEP+1.5;$('src').textContent='intro';
+}
+$('power').addEventListener('click',playIntro);
 
-        <article class="project-card reveal">
-          <div class="project-visual vox-visual">
-            <img src="assets/voxnovel-logo.jpeg" alt="VoxNovel">
-            <span>THE IDEA LIVES ON IN<br><strong>E2A-SML</strong></span>
-          </div>
-          <div class="project-copy">
-            <div class="project-meta"><span>Legacy project</span><span>2023 to 2024</span></div>
-            <h3>VoxNovel</h3>
-            <p>The original multi-character audiobook project: it detected characters, attributed dialogue, and assigned distinct voices automatically. Its successor now lives inside ebook2audiobook as E2A-SML.</p>
-            <div class="project-proof"><strong>373</strong> stars <span>•</span> <strong>57</strong> forks</div>
-            <div class="project-links">
-              <a class="project-link" href="https://github.com/DrewThomasson/ebook2audiobook/tree/main/components/E2A-SML" target="_blank" rel="noreferrer">Explore E2A-SML <span>↗</span></a>
-              <a class="project-link project-link-muted" href="https://github.com/DrewThomasson/VoxNovel" target="_blank" rel="noreferrer">View legacy repo <span>↗</span></a>
-            </div>
-          </div>
-        </article>
+/* ---------- voice lab players ---------- */
+let clip=null,clipBtn=null;const peaks=new Map();
+const btns=[...document.querySelectorAll('.pbtn')];
+function stopClip(){if(clip){clip.pause();clip=null}if(clipBtn){clipBtn.classList.remove('on');clipBtn.textContent=clipBtn.dataset.lab}clipBtn=null;$('now').textContent='idle · press a play button'}
+btns.forEach(b=>{b.dataset.lab=b.textContent;
+  b.addEventListener('click',()=>{
+    initAudio();ac.resume();
+    if(clipBtn===b){stopClip();return}
+    stopClip();introEnd=-1;
+    const a=new Audio(b.dataset.src);a.crossOrigin='anonymous';
+    const n=ac.createMediaElementSource(a);n.connect(bus);
+    a.play().catch(()=>{});clip=a;clipBtn=b;b.classList.add('on');b.textContent='❚❚';
+    $('now').textContent='now playing · '+b.dataset.name;$('src').textContent=b.dataset.name.split(' · ')[0];
+    a.addEventListener('ended',()=>{if(clip===a)stopClip()});
+  });
+  decodePeaks(b);
+});
+async function decodePeaks(b){
+  try{const r=await fetch(b.dataset.src);const buf=await r.arrayBuffer();
+    const oc=new (window.OfflineAudioContext||window.webkitOfflineAudioContext)(1,44100,44100);
+    const ab=await oc.decodeAudioData(buf);const d=ab.getChannelData(0),N=160,pk=new Float32Array(N),s=Math.floor(d.length/N);
+    for(let i=0;i<N;i++){let m=0;for(let j=i*s;j<(i+1)*s;j+=16){const v=Math.abs(d[j]);if(v>m)m=v}pk[i]=m}
+    const mx=Math.max(...pk)||1;for(let i=0;i<N;i++)pk[i]/=mx;peaks.set(b,pk);
+  }catch(e){}
+}
+const tracks=btns.map(b=>({b,o:reg(b.parentElement.querySelector('.tw canvas'))}));
 
-        <article class="project-card reveal">
-          <div class="project-visual offline-visual">
-            <div class="search-box"><span>⌕</span><span>Search everything you watched…</span></div>
-            <div class="search-result"><i></i><p><strong>01:42:18</strong><br>“…the exact moment you were looking for.”</p></div>
-            <div class="search-result"><i></i><p><strong>03:17</strong><br>Semantic match across your library</p></div>
-          </div>
-          <div class="project-copy">
-            <div class="project-meta"><span>Local AI search</span><span>2024</span></div>
-            <h3>offlineYoutube</h3>
-            <p>Download, transcribe, and semantically search entire video libraries locally using Whisper, FAISS, and embeddings.</p>
-            <ul class="tag-list"><li>Whisper</li><li>FAISS</li><li>PyPI</li></ul>
-            <a class="project-link" href="https://github.com/DrewThomasson/offlineYoutube" target="_blank" rel="noreferrer">View project <span>↗</span></a>
-          </div>
-        </article>
+$('copy').addEventListener('click',()=>{const t=$('email').textContent;
+  const done=()=>{$('copy').textContent='Copied'};
+  if(navigator.clipboard)navigator.clipboard.writeText(t).then(done,()=>{getSelection().selectAllChildren($('email'))});else getSelection().selectAllChildren($('email'))});
 
-        <article class="project-card reveal">
-          <div class="project-visual itunes-visual">
-            <div class="tui">
-              <span class="tui-title">♪ itunespull</span>
-              <div><b>PLAYLISTS</b><b>TRACKS</b></div>
-              <div><em>› Favorites</em><span>Midnight City</span></div>
-              <div><em>  Recently Added</em><span>Digital Love</span></div>
-              <div><em>  Most Played</em><span>Dreams</span></div>
-              <div class="playing">▶ 03:24 ━━━━━━━╸ 04:03</div>
-            </div>
-          </div>
-          <div class="project-copy">
-            <div class="project-meta"><span>Developer tool</span><span>2026</span></div>
-            <h3>itunespull</h3>
-            <p>A Go-powered terminal music player that browses, streams, and syncs a remote Apple Music library over SSH.</p>
-            <ul class="tag-list"><li>Go</li><li>Bubble Tea</li><li>SSH</li><li>Homebrew</li></ul>
-            <a class="project-link" href="https://github.com/DrewThomasson/itunespull" target="_blank" rel="noreferrer">View project <span>↗</span></a>
-          </div>
-        </article>
+/* ---------- sky ---------- */
+const SW=180,SH=110,sky=document.createElement('canvas');sky.width=SW;sky.height=SH;const sg=sky.getContext('2d'),simg=sg.createImageData(SW,SH);
+function hash(x,y){let h=Math.imul(x,374761393)+Math.imul(y,668265263)|0;h=Math.imul(h^(h>>>13),1274126177);return((h^(h>>>16))>>>0)/4294967295}
+function vn(x,y){const xi=Math.floor(x),yi=Math.floor(y),xf=x-xi,yf=y-yi,u=xf*xf*(3-2*xf),v=yf*yf*(3-2*yf),a=hash(xi,yi),b=hash(xi+1,yi),c=hash(xi,yi+1),d=hash(xi+1,yi+1);return a+(b-a)*u+(c-a)*v+(a-b-c+d)*u*v}
+function fbm(x,y){let s=0,a=.5;for(let i=0;i<5;i++){s+=a*vn(x,y);x=x*2.03+17.1;y=y*2.03+3.7;a*=.5}return s}
+const ss=(a,b,x)=>{const t=Math.min(1,Math.max(0,(x-a)/(b-a)));return t*t*(3-2*t)};
+let skyT=0;
+function renderSky(glow){const D=simg.data;
+  for(let y=0;y<SH;y++){const fy=y/SH,sr=44+fy*110,sgc=104+fy*96,sb=196+fy*46,cov=.47-fy*.1;
+    for(let x=0;x<SW;x++){const nx=x*.02+skyT,ny=y*.036,n=fbm(nx,ny),d=ss(cov,cov+.25,n),sh=Math.max(0,n-fbm(nx+.05,ny-.08))*5,w=245+glow*10-sh*55,wb=255-sh*26,i=(y*SW+x)*4;
+      D[i]=sr*(1-d)+(w-6)*d;D[i+1]=sgc*(1-d)+w*d;D[i+2]=sb*(1-d)+wb*d;D[i+3]=255}}
+  sg.putImageData(simg,0,0)}
 
-        <article class="project-card reveal">
-          <div class="project-visual tv-visual">
-            <div class="retro-tv">
-              <div class="tv-screen"><span>YOU’RE WATCHING</span><strong>THE 90s</strong><i></i></div>
-              <div class="tv-controls">●<br>●</div>
-            </div>
-          </div>
-          <div class="project-copy">
-            <div class="project-meta"><span>Full-stack media</span><span>2025</span></div>
-            <h3>JellyfinTV</h3>
-            <p>Turns a Jellyfin library into always-on virtual TV channels with intelligent scheduling, filters, and era-appropriate ads.</p>
-            <ul class="tag-list"><li>FastAPI</li><li>Docker</li><li>Scheduling</li></ul>
-            <a class="project-link" href="https://github.com/DrewThomasson/JellyfinTV" target="_blank" rel="noreferrer">View project <span>↗</span></a>
-          </div>
-        </article>
-      </div>
-    </section>
+/* ---------- loop ---------- */
+const starHist=[0,30,45,70,90,140,210,300,380,520,700,900,1300,1800,2600,3700,5200,7000,9200,11800,14000,16200,17900,19500];
+const orbP=Array.from({length:150},()=>({a:Math.random()*6.283,r:.5+Math.random()*.5,s:.3+Math.random(),z:Math.random()}));
+const scopeHist=[];let frame=0,last=performance.now()/1000,statIdx=0;
+function fmtN(n){return n.toLocaleString('en-US')}
+function draw(){
+  const t=performance.now()/1000,dt=Math.min(.05,t-last);last=t;
+  let rms=0,bassE=0,live=false;
+  if(an){an.getFloatTimeDomainData(tb);an.getByteFrequencyData(fb);anL.getFloatTimeDomainData(lb);anR.getFloatTimeDomainData(rb);
+    for(let i=0;i<2048;i+=4)rms+=tb[i]*tb[i];rms=Math.sqrt(rms/512);for(let i=1;i<8;i++)bassE+=fb[i];bassE/=7*255;live=rms>.002}
+  const intro=ac&&introEnd>0&&ac.currentTime<introEnd&&ac.currentTime>=introStart;
+  const ip=intro?(ac.currentTime-introStart)/(64*STEP):0;
+  if(intro){const k=Math.min(BOOT.length-1,1+Math.floor(ip*(BOOT.length-1)));if(k!==statIdx){statIdx=k;$('stat').textContent=BOOT[k]}
+    $('deg').textContent=DEG[Math.min(3,Math.floor(ip*4))]}
+  else if(introEnd>0&&ac&&ac.currentTime>=introEnd&&statIdx!==BOOT.length-1){statIdx=BOOT.length-1;$('stat').textContent=BOOT[statIdx]}
 
-    <section class="about-section" id="about">
-      <div class="about-label reveal"><p class="eyebrow">About / The short version</p></div>
-      <div class="about-copy reveal">
-        <h2>I like difficult problems and simple interfaces.</h2>
-        <p class="about-lead">My best work starts with “why is this still so hard?” and ends with a tool people can actually install.</p>
-        <div class="about-columns">
-          <p>I have experience with <a href="https://gearboxgo.com/" target="_blank" rel="noreferrer">Gearbox</a> and work in IT at Adult Swim while studying at Georgia State University, where I am also a member of the Alser Lab in the Department of Computer Science.</p>
-          <p>I build in public, listen to users, and follow projects past the prototype stage into packaging, documentation, releases, and long-term maintenance.</p>
-        </div>
-        <div class="capabilities">
-          <span>Machine learning pipelines</span>
-          <span>Audio & media processing</span>
-          <span>Python & Go</span>
-          <span>CLI & desktop products</span>
-          <span>Docker & cross-platform delivery</span>
-          <span>Open-source communities</span>
-        </div>
-        <div class="current-work">
-          <article>
-            <span>Industry</span>
-            <strong>Adult Swim</strong>
-            <p>Information technology</p>
-          </article>
-          <article>
-            <span>Experience</span>
-            <strong>Gearbox</strong>
-            <p>Gearboxgo.com</p>
-            <a href="https://gearboxgo.com/" target="_blank" rel="noreferrer">Visit Gearbox ↗</a>
-          </article>
-          <article>
-            <span>Education</span>
-            <strong>Georgia State University</strong>
-            <p>Student in Atlanta, Georgia</p>
-          </article>
-          <article>
-            <span>Research</span>
-            <strong>Alser Lab</strong>
-            <p>Computer science research</p>
-            <a href="https://alserlab.github.io/index.html" target="_blank" rel="noreferrer">Visit the lab ↗</a>
-          </article>
-        </div>
-        <article class="recognition-card">
-          <figure>
-            <img src="assets/drew-thomasson-gsurc-awards.jpg" alt="Drew Thomasson holding his two Georgia State Undergraduate Research Conference awards" loading="lazy" width="1350" height="1800">
-          </figure>
-          <div class="recognition-copy">
-            <p class="eyebrow">Recognition / Ebook2audiobook</p>
-            <h3>Two honors from Georgia State.</h3>
-            <p>
-              Ebook2audiobook earned <strong>1st Place in Applied Research and Entrepreneurship</strong>
-              for its poster presentation and a <strong>Global Engagement Award</strong> at the
-              Georgia State Undergraduate Research Conference.
-            </p>
-            <p class="award-sponsor">Project sponsor: Professor Mohammed Alser</p>
-            <a class="project-link" href="https://curci.gsu.edu/gsurc/#1775674136848-79edcb94-7e5e" target="_blank" rel="noreferrer">View the official winners <span>↗</span></a>
-          </div>
-        </article>
-      </div>
-    </section>
+  /* sky */
+  if(!RM||live)skyT+=dt*(.03+rms*.3);
+  if(frame%2===0||cv.sky.fresh)renderSky(bassE);
+  {const o=cv.sky,g=o.g;g.imageSmoothingEnabled=true;g.imageSmoothingQuality='high';g.drawImage(sky,0,0,o.w,o.h);o.fresh=false;
+    const bx=o.w*(.72+.12*Math.sin(t*.19)),by=o.h*(.3+.1*Math.cos(t*.15)),bs=20+bassE*14;
+    g.strokeStyle='rgba(255,255,255,.85)';g.lineWidth=1;g.strokeRect(bx-bs,by-bs,bs*2,bs*2);
+    [[-1,0],[1,0],[0,-1],[0,1]].forEach(([dx,dy])=>hair(g,bx+dx*bs,by+dy*bs,bx+dx*(bs+9),by+dy*(bs+9),'#fff'));
+    g.fillStyle='rgba(255,255,255,.95)';g.font='9px '+FONT;g.fillText('TRK '+String(Math.round(bx)).padStart(3,'0')+'.'+String(Math.round(by)).padStart(3,'0'),bx+bs+5,by-bs+9)}
 
-    <section class="contact-section reveal">
-      <p class="eyebrow">Have an interesting problem?</p>
-      <h2>Let’s build something<br><em>people want.</em></h2>
-      <div class="contact-links">
-        <a class="button button-light" href="mailto:ebook2audiobook@gmail.com">Email me <span>↗</span></a>
-        <a href="https://github.com/DrewThomasson" target="_blank" rel="noreferrer">GitHub ↗</a>
-        <a href="https://www.twitch.tv/athomasson2" target="_blank" rel="noreferrer">Twitch ↗</a>
-        <a href="https://www.youtube.com/@AT-tech-tips" target="_blank" rel="noreferrer">YouTube ↗</a>
-        <a href="https://ebook2audiobook.com" target="_blank" rel="noreferrer">ebook2audiobook.com ↗</a>
-      </div>
-    </section>
-  </main>
+  /* stars mountain */
+  {const o=cv.mtn,g=o.g;clear(o);const L=8,R=o.w-8,top=8,base=o.h-6,n=starHist.length,xs=i=>L+i/(n-1)*(R-L),ym=v=>base-v/20000*(base-top);
+    for(let i=0;i<4;i++)hair(g,L,top+i*(base-top)/3,R,top+i*(base-top)/3,C.line,.5);
+    const gr=g.createLinearGradient(0,top,0,base);gr.addColorStop(0,'rgba(46,107,209,.28)');gr.addColorStop(1,'rgba(46,107,209,0)');
+    g.beginPath();g.moveTo(L,base);starHist.forEach((v,i)=>g.lineTo(xs(i),ym(v)));g.lineTo(R,base);g.fillStyle=gr;g.fill();
+    starHist.forEach((v,i)=>{if(i%3===1)hair(g,xs(i),ym(v),xs(Math.min(n-1,i+3)),base,C.blue,.22)});
+    g.strokeStyle=C.navy;g.lineWidth=1.3;g.beginPath();starHist.forEach((v,i)=>i?g.lineTo(xs(i),ym(v)):g.moveTo(xs(i),ym(v)));g.stroke();g.lineWidth=1;
+    g.fillStyle=C.teal;g.beginPath();g.arc(xs(n-1),ym(starHist[n-1]),3+bassE*4+Math.sin(t*3)*.6,0,6.283);g.fill();
+    g.fillStyle=C.mute;g.font='8px '+FONT;g.fillText('2023',L,base-3);g.textAlign='right';g.fillText('NOW',R-8,base-3);g.textAlign='left'}
 
-  <footer>
-    <span>© <span id="year"></span> Drew Thomasson</span>
-    <span>Atlanta, GA <i>•</i> Built with curiosity</span>
-    <a href="#top">Back to top ↑</a>
-  </footer>
+  /* orb */
+  {const o=cv.orb,g=o.g;clear(o);const cx=o.w/2,cy=o.h/2,R=Math.min(o.w,o.h)*.36,e=bassE*1.6+rms*2;
+    orbP.forEach(p=>{p.a+=dt*p.s*(.25+e*2.5)*(RM&&!live?0:1);const rr=R*(p.r+e*.4*p.z)+Math.sin(p.a*3+t)*2,x=cx+Math.cos(p.a)*rr,y=cy+Math.sin(p.a)*rr*.9;
+      g.fillStyle=p.z>.7?C.teal:C.navy;g.globalAlpha=.3+p.z*.6;g.fillRect(x,y,1.5,1.5)});g.globalAlpha=1;
+    g.fillStyle=C.navy;g.beginPath();g.arc(cx,cy,R*.27*(1+e*.3),0,6.283);g.fill();
+    g.strokeStyle=C.blue;g.lineWidth=1.4;g.beginPath();g.arc(cx,cy,R*.27+5,t*1.3,t*1.3+2.2);g.stroke();g.lineWidth=1}
+
+  /* dial */
+  {const o=cv.dial,g=o.g;clear(o);const cx=o.w/2,cy=o.h/2,R=Math.min(o.w,o.h)*.42,bf=intro?(ip*4)%1:(t*.1)%1;
+    for(let i=0;i<48;i++){const a=i/48*6.283-1.571,l=i%12===0?6:3;hair(g,cx+Math.cos(a)*R,cy+Math.sin(a)*R,cx+Math.cos(a)*(R-l),cy+Math.sin(a)*(R-l),C.mute,.8)}
+    g.strokeStyle=C.blue;g.lineWidth=3;g.beginPath();g.arc(cx,cy,R*.76,-1.571,-1.571+bf*6.283);g.stroke();
+    g.strokeStyle=C.teal;g.lineWidth=2;g.beginPath();g.arc(cx,cy,R*.64,-1.571,-1.571+(intro?ip:0)*6.283);g.stroke();g.lineWidth=1;
+    g.fillStyle=C.navy;g.font='500 '+Math.round(R*.5)+'px '+FONT;g.textAlign='center';g.textBaseline='middle';g.fillText($('deg').textContent,cx,cy+1);g.textAlign='left';g.textBaseline='alphabetic'}
+
+  /* strip */
+  {const o=cv.wave,g=o.g;clear(o);const mid=o.h/2,amp=o.h*.42,N=140;g.fillStyle=C.ink;
+    for(let i=0;i<N;i++){const v=an?Math.abs(tb[Math.floor(i/N*2048)]):0,h=Math.max(.6,Math.min(1,v*3)*amp);g.globalAlpha=.25+Math.min(1,v*4)*.7;g.fillRect(6+i*(o.w-12)/N,mid-h,Math.max(.8,(o.w-12)/N-.4),h*2)}
+    g.globalAlpha=1;hair(g,6,mid,o.w-6,mid,C.blue,.6)}
+  {const o=cv.scope,g=o.g;clear(o);const mid=o.h/2;
+    if(an){let z=0;for(let i=1;i<600;i++)if(tb[i-1]<0&&tb[i]>=0){z=i;break}scopeHist.unshift(tb.slice(z,z+400));if(scopeHist.length>5)scopeHist.pop()}
+    for(let i=0;i<5;i++)hair(g,0,i*o.h/4,o.w,i*o.h/4,C.line,.5);
+    if(!scopeHist.length)hair(g,6,mid,o.w-6,mid,C.blue,.8);
+    scopeHist.forEach((b,j)=>{g.strokeStyle=C.blue;g.globalAlpha=j?.18/j:.95;g.beginPath();for(let i=0;i<b.length;i++){const x=6+i/b.length*(o.w-12),y=mid-b[i]*o.h*1.1;i?g.lineTo(x,y):g.moveTo(x,y)}g.stroke()});g.globalAlpha=1}
+  {const o=cv.spec,g=o.g;clear(o);const N=28,bw=(o.w-12)/N,base=o.h-4;
+    for(let i=0;i<N;i++){const lo=Math.floor(2*Math.pow(300,i/N)),hi=Math.max(lo+1,Math.floor(2*Math.pow(300,(i+1)/N)));let v=0;if(an){for(let k=lo;k<hi;k++)v+=fb[k];v/=(hi-lo)*255}
+      const h=Math.max(1,v*(o.h-8));g.fillStyle=i%5===2?C.blue:C.navy;g.globalAlpha=.85;g.fillRect(6+i*bw,base-h,bw-1.5,h)}g.globalAlpha=1}
+  {const o=cv.vec,g=o.g;clear(o);const cx=o.w/2,cy=o.h/2,R=Math.min(o.w,o.h)*.42;
+    g.strokeStyle=C.line;g.beginPath();g.arc(cx,cy,R,0,6.283);g.stroke();hair(g,cx-R,cy,cx+R,cy,C.line);hair(g,cx,cy-R,cx,cy+R,C.line);
+    if(an){g.fillStyle=C.blue;g.globalAlpha=.55;for(let i=0;i<1024;i+=2){const l=lb[i],r=rb[i],x=(l-r)*.707*R*2.2,y=(l+r)*.707*R*2.2;if(x*x+y*y<R*R*1.1)g.fillRect(cx+x,cy-y,1.2,1.2)}g.globalAlpha=1}}
+
+  /* spectrogram (scrolls while anything plays) */
+  {const o=cv.spectro,g=o.g;
+    if(o.fresh){g.fillStyle=C.hl;g.fillRect(0,0,o.w,o.h);for(let i=0;i<5;i++)hair(g,0,i*o.h/4,o.w,i*o.h/4,C.line,.6);o.fresh=false}
+    if(live){const d=Math.min(devicePixelRatio||1,2);g.save();g.setTransform(1,0,0,1,0,0);g.drawImage(o.c,-2*d,0);g.restore();
+      const x=o.w-2;g.fillStyle=C.hl;g.fillRect(x,0,2,o.h);
+      for(let y=0;y<o.h;y+=2){const bin=Math.floor(Math.pow(1-y/o.h,2.2)*360)+1,v=fb[bin]/255;if(v>.18){g.fillStyle=v>.6?C.navy:v>.4?C.blue:C.teal;g.globalAlpha=Math.min(1,v*1.3);g.fillRect(x,y,2,2)}}
+      g.globalAlpha=1}}
+
+  /* A/B track waveforms with playhead */
+  tracks.forEach(({b,o})=>{const g=o.g;clear(o);const pk=peaks.get(b),mid=o.h/2,N=pk?pk.length:80,w=o.w/N;
+    const prog=(clipBtn===b&&clip&&clip.duration)?clip.currentTime/clip.duration:0;
+    for(let i=0;i<N;i++){const v=pk?pk[i]:.08+.05*Math.sin(i*.9),h=Math.max(1,v*(o.h/2-3));g.fillStyle=(i/N<prog)?C.blue:C.line;g.fillRect(i*w+.5,mid-h,Math.max(.8,w-1),h*2)}
+    if(prog>0)hair(g,prog*o.w,0,prog*o.w,o.h,C.navy)});
+
+  /* project visuals */
+  vizzes.forEach(({o,t:ty})=>{const g=o.g;clear(o);const cx=o.w*.62,cy=o.h*.55;
+    if(ty==='disc'){const R=Math.min(o.w,o.h)*.42,a=t*(RM?0:.8);
+      for(let r=R;r>R*.25;r-=4){g.strokeStyle=C.line;g.globalAlpha=.6;g.beginPath();g.arc(cx,cy,r,0,6.283);g.stroke()}g.globalAlpha=1;
+      g.fillStyle='rgba(46,107,209,.18)';g.beginPath();g.moveTo(cx,cy);g.arc(cx,cy,R,a,a+.9);g.fill();
+      g.strokeStyle=C.navy;g.beginPath();g.arc(cx,cy,R*.22,0,6.283);g.stroke();g.fillStyle=C.navy;g.beginPath();g.arc(cx,cy,3,0,6.283);g.fill()}
+    else if(ty==='db'){const N=44,bw=(o.w-24)/N;for(let i=0;i<N;i++){const v=live?(fb[2+i*6]/255):(.35+.25*Math.sin(i*.6+t*1.4)*Math.sin(i*.23+t*.7)+.1*Math.sin(t*5+i));
+        const h=Math.max(2,v*(o.h*.55));g.fillStyle=v>.72?'#d1453b':i%6===0?C.blue:C.navy;g.globalAlpha=.85;g.fillRect(12+i*bw,o.h-10-h,bw-1.5,h)}g.globalAlpha=1;
+      hair(g,12,o.h*.38,o.w-12,o.h*.38,'#d1453b',.6)}
+    else if(ty==='tv'){const cols=['#e9eef3','#3a9f9b','#2e6bd1','#1b2940','#c6d0db','#7a889b','#f6f8fa'],bw=(o.w-24)/7;
+      cols.forEach((c,i)=>{g.fillStyle=c;g.fillRect(12+i*bw,30,bw,o.h-70)});g.strokeStyle=C.line;g.strokeRect(12,30,o.w-24,o.h-70);
+      for(let i=0;i<7;i++){g.fillStyle=i%2?C.navy:C.hl;g.fillRect(12+i*bw,o.h-38,bw,10)}
+      const sy=30+((t*40)%(o.h-70));g.fillStyle='rgba(255,255,255,.35)';g.fillRect(12,sy,o.w-24,3)}
+    else if(ty==='voices'){const names=['NARRATOR','MARA','OLD TOM','KEEPER'],cs=[C.navy,C.teal,C.blue,C.mute];
+      names.forEach((n,k)=>{const y=40+k*((o.h-50)/4);g.fillStyle=C.mute;g.font='8px '+FONT;g.fillText(n,12,y+3);
+        for(let i=0;i<26;i++){const on=Math.sin(i*1.7+k*2.3+Math.floor(t*(RM?0:1.5)))>.35;if(on){g.fillStyle=cs[k];g.fillRect(70+i*((o.w-82)/26),y-2,(o.w-82)/26-2,5)}}})}
+  });
+
+  /* medal */
+  if(frame===0||cv.medal.fresh){const o=cv.medal,g=o.g;clear(o);const cx=o.w/2,cy=o.h/2,R=Math.min(o.w,o.h)*.45;
+    g.strokeStyle=C.navy;g.beginPath();g.arc(cx,cy,R,0,6.283);g.stroke();
+    for(let i=0;i<36;i++){const a=i/36*6.283;hair(g,cx+Math.cos(a)*R*.86,cy+Math.sin(a)*R*.86,cx+Math.cos(a)*R*.94,cy+Math.sin(a)*R*.94,C.blue,.8)}
+    g.fillStyle=C.navy;g.font='500 '+Math.round(R*.7)+'px '+FONT;g.textAlign='center';g.textBaseline='middle';g.fillText('1st',cx,cy-2);
+    g.font=Math.round(R*.17)+'px '+FONT;g.fillStyle=C.mute;g.fillText('GSURC',cx,cy+R*.5);g.textAlign='left';g.textBaseline='alphabetic';o.fresh=false}
+
+  frame++;requestAnimationFrame(draw);
+}
+requestAnimationFrame(draw);
+})();
+</script>
 </body>
 </html>
