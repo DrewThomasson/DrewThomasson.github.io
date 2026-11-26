@@ -188,6 +188,12 @@ html.locked{overflow:hidden}
 .skip{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;background:none;border:0;color:rgba(255,255,255,.88);cursor:pointer;text-decoration:underline;text-underline-offset:3px;padding:6px}
 .skip:focus-visible{outline:2px solid var(--hl)}
 .skip.corner{position:absolute;top:calc(env(safe-area-inset-top,0px) + 48px);right:calc(env(safe-area-inset-right,0px) + 12px)}
+.stage{transition:border-color .15s,background .15s}
+.stage.on{border-color:var(--blue);background:var(--hl)}
+/* distillation strip: slim helper under the signal-chain cards, thirds line up with 01 / 02 / 03 */
+.distill{height:84px;background:var(--navy);border-color:var(--navy);overflow:hidden}
+.distill canvas{position:absolute;inset:0}
+.plain{font-size:13px;color:var(--mute);max-width:80ch}
 @media (max-width:860px){
   .hero,.flag,.about,.lab{grid-template-columns:1fr}
   .flag .copy{border-right:0;border-bottom:1px solid var(--line)}
@@ -360,6 +366,8 @@ html.locked{overflow:hidden}
     <div class="arrow">→</div>
     <div class="panel stage"><span class="n">03</span><b>Compact deployment</b><span class="meta">A fast, lightweight Piper voice</span></div>
   </div>
+  <div class="panel distill" aria-label="Animation: five seconds of voice, a big model makes clips, then it is squeezed into a small model"><canvas id="distillc"></canvas></div>
+  <p class="plain">In plain words: a big AI learns your voice from 5 seconds, then teaches a small AI to sound the same. 1.8 GB becomes 63 MB, small enough to run anywhere.</p>
   <div class="row" style="gap:18px"><a class="go" href="https://github.com/DrewThomasson/ebook2audiobook/tree/main/components/Universal_TTS_Finetune">Explore the finetuner ↗</a><a class="go" href="https://github.com/DrewThomasson/ebook2audiobook/tree/main/components/E2A-SML">Explore E2A-SML ↗</a></div>
   <p class="fine">Research demonstration. Generated voices are presented for technical comparison and are not affiliated with or endorsed by the people whose vocal characteristics inspired them.</p>
 
@@ -433,7 +441,7 @@ function initAudio(){
 const BOOT=['standby','loading signal','loading projects','landing','alignment complete'];
 /* [start beat counted from 2.0 s at 0.5 s per beat, lines, small caption] */
 const KW=[[0,['audio'],'(record · measure · report)'],[2,['text-to-speech'],'(xtts · piper · more)'],[4,['voice','cloning'],'(five seconds of voice)'],
-  [6,['ai','fine-tuning'],'(xtts → piper)'],[8,['audio','analysis'],'(fft · dB · spectra)'],[10,['speech','synthesis'],'(narrator + characters)'],
+  [6,['ai','distillation'],'(1.8 GB → 63 MB)'],[8,['audio','analysis'],'(fft · dB · spectra)'],[10,['speech','synthesis'],'(narrator + characters)'],
   [12,['local ai'],'(cpu or gpu)'],[14,['open source'],'(build in public)'],[16,['python','go'],'(cli · desktop · docker)'],
   [18,['media','tooling'],'(ffmpeg · jellyfin)'],[20,['21,400★'],'(github stars)'],[22,['ebook2','audiobook'],'(1,704 languages)'],
   [24,['books','become','voices'],'']];
@@ -556,7 +564,54 @@ const skyline=[];{let x=0;while(x<1.05){const w=.05+Math.random()*.1;skyline.pus
 function rng(seed){let a=seed|0;return()=>{a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 let pKey='',pIdx=0,pT=0,scene=1,spike=0;
 const PDUR=3.4;
-function pipScene(g,w,h,kind,t){
+/* ---------- distill shot: a BIG model gets crushed into a SMALL one (intro beat "ai distillation") ----------
+   Reads at a glance: huge block labelled 1.8 GB, ghost outline of where it started, it jerks down in
+   stepped, torn, RGB-split frames into a tiny block labelled 63 MB. No smooth tweens anywhere. */
+const DCELLS=(()=>{const r=rng(4242);return Array.from({length:12*12},()=>r())})();
+function distillScene(g,w,h,t,p){
+  p=Math.max(0,Math.min(1,p));
+  g.fillStyle='#1b2940';g.fillRect(0,0,w,h);
+  const c=g.canvas,d=c.width/Math.max(1,w),S=Math.min(w,h),narrow=w<h;
+  /* stutter clock: 12 fps, progress jumps in 6 hard steps and sometimes slips back a step */
+  const fr=Math.floor(t*12),r=rng(fr*7919+3),steps=6;
+  let st=Math.floor(p*steps);if(!RM&&r()<.28&&st>0)st--;if(p>.93)st=steps;
+  const q=st/steps;
+  const big=S*(narrow?.5:.6),small=S*(narrow?.13:.12);
+  const x0=w*(narrow?.5:.66),y0=h*(narrow?.7:.5),x1=w*(narrow?.82:.88),y1=h*(narrow?.84:.62);
+  const sz=big+(small-big)*q,cx=x0+(x1-x0)*q+(r()-.5)*S*.03,cy=y0+(y1-y0)*q;
+  const fsm=Math.round(Math.max(10,Math.min(13,w/80))),mono=fsm+'px "IBM Plex Mono",monospace';
+  /* where it started (ghost) and where it has to fit (target) */
+  g.setLineDash([4,4]);g.lineWidth=1;
+  g.strokeStyle='rgba(156,200,240,.35)';g.strokeRect(x0-big/2,y0-big/2,big,big);
+  g.strokeStyle='rgba(125,240,198,.8)';g.strokeRect(x1-small/2,y1-small/2,small,small);g.setLineDash([]);
+  /* the model itself: a 12x12 block of "weights", drawn three times for RGB split */
+  const n=12,cs=sz/n,split=RM?0:(3+r()*10)*(q<1?1:.3);
+  const block=(dx,dy,col)=>{g.fillStyle=col;for(let i=0;i<n*n;i++){const v=DCELLS[i];if(v<.18&&q<1)continue;
+    const gx=cx-sz/2+(i%n)*cs+dx,gy=cy-sz/2+Math.floor(i/n)*cs+dy;g.globalAlpha=.35+v*.55;g.fillRect(gx+.5,gy+.5,Math.max(1,cs-1),Math.max(1,cs-1))}g.globalAlpha=1};
+  g.globalCompositeOperation='lighter';
+  block(-split,0,'#ff3b6b');block(split,r()*3,'#2fd6ff');block(0,0,q>=1?'#7df0c6':'#6f8ff0');
+  g.globalCompositeOperation='source-over';
+  /* tear the block: shift a few horizontal slices sideways */
+  for(let k=0;k<(RM?0:4);k++){const sy=cy-sz/2+r()*sz,sh=2+r()*sz*.12,dx=(r()-.5)*S*.12;
+    g.drawImage(c,Math.max(0,(cx-sz/2-S*.1)*d),sy*d,(sz+S*.2)*d,Math.max(1,sh*d),cx-sz/2-S*.1+dx,sy,sz+S*.2,sh)}
+  /* dropped frame: a dead band */
+  if(!RM&&r()<.12){g.fillStyle='#1b2940';g.fillRect(0,cy-sz/2+r()*sz,w,3+r()*S*.04)}
+  /* plain-language labels */
+  const mb=Math.exp(Math.log(1800)+(Math.log(63)-Math.log(1800))*q),size=mb>=1000?(mb/1000).toFixed(1)+' GB':Math.round(mb)+' MB';
+  g.font='600 '+Math.round(fsm*1.15)+'px "IBM Plex Mono",monospace';g.fillStyle='#ffffff';
+  const top=q>=1?'SMALL AI MODEL':'BIG AI MODEL',lx=cx-sz/2;
+  g.fillText(top,lx+(r()<.2?(r()-.5)*8:0),cy-sz/2-fsm*.7);
+  g.font=mono;g.fillStyle=q>=1?'#7df0c6':'#cfe3f7';g.fillText(size+(q>=1?' · same voice':''),lx,cy+sz/2+fsm*1.4);
+  g.fillStyle='rgba(255,255,255,.6)';g.fillText('started here · 1.8 GB',x0-big/2,y0+big/2+fsm*1.4);
+  /* chunky progress: 10 hard blocks */
+  const bx=narrow?w*.07:x0-big/2,by=narrow?h*.93:y0-big/2-fsm*2.6,bw=narrow?w*.86:big,on=Math.round(q*10);
+  for(let k=0;k<10;k++){g.fillStyle=k<on?'#7df0c6':'rgba(255,255,255,.15)';g.fillRect(bx+k*bw/10,by,bw/10-3,6)}
+  g.font=mono;g.fillStyle='#ffffff';g.fillText('FINE-TUNING '+Math.round(q*100)+'%',bx,by-fsm*.6);
+  /* scanlines over everything */
+  g.fillStyle='rgba(0,0,0,.12)';for(let y=(fr%3);y<h;y+=3)g.fillRect(0,y,w,1);
+}
+function pipScene(g,w,h,kind,t,p=0){
+  if(kind===3){distillScene(g,w,h,t,p);return}
   if(kind===2){g.fillStyle=C.navy;g.fillRect(0,0,w,h);
     for(let k=0;k<16;k++){const y0=h*.22+k*h*.042;g.strokeStyle='rgba(156,200,240,'+(.2+k*.045)+')';g.beginPath();
       for(let i=0;i<=48;i++){const x=i/48*w,v=an?Math.abs(tb[((k*53+i*19)%1000)*2])*h*.9:0,y=y0-v*Math.sin(i/48*Math.PI)-Math.sin(i*.45+t*1.2+k)*1.6;i?g.lineTo(x,y):g.moveTo(x,y)}
@@ -650,11 +705,11 @@ function drawIntro(t,rms,it){
   if(it<0){I=.05}
   else if(it<2){kind=2;I=.12+rms*1.5+(it>1.68?.8:0)}
   else if(it<16){const b=(it-2)/.5;for(let i=KW.length-1;i>=0;i--)if(KW[i][0]<=b){idx=i;break}
-    entry=KW[idx];el=it-(2+entry[0]*.5);kind=idx%3;const ph=(it-2)%.5;
+    entry=KW[idx];el=it-(2+entry[0]*.5);kind=entry[1].includes('distillation')?3:idx%3;const ph=(it-2)%.5;
     I=.14+rms*2.5+(el<.12?.85:0)+(ph>.22&&ph<.3?.35:0);if(it>15.45)I=1}
   else{kind=1;I=.25+rms*2}
-  if(RM)I=Math.min(I,.08);I=Math.min(1,I);
-  g.clearRect(0,0,w,h);pipScene(g,w,h,kind,t);
+  if(kind===3)I+=.35;if(RM)I=Math.min(I,.08);I=Math.min(1,I);
+  g.clearRect(0,0,w,h);pipScene(g,w,h,kind,t,el);
   const seed=RM?3:Math.floor(t*10)+idx*97;
   pipGlitch(g,o.c,w,h,I,seed,d);
   if(entry)bigText(g,w,h,entry,el,seed+11);
@@ -789,6 +844,67 @@ function draw(){
     g.font=Math.round(R*.17)+'px '+FONT;g.fillStyle=C.mute;g.fillText('GSURC',cx,cy+R*.5);g.textAlign='left';g.textBaseline='alphabetic';o.fresh=false}
 
   frame++;requestAnimationFrame(draw);
+}
+requestAnimationFrame(draw);
+})();
+</script>
+<script>
+/* ---------- distillation strip under the signal chain ---------- */
+(()=>{
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function rng(seed){let a=seed|0;return()=>{a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const cvs=document.getElementById('distillc'),g=cvs.getContext('2d');let w=0,h=0,d=1;
+function fit(){const r=cvs.getBoundingClientRect();d=Math.min(devicePixelRatio||1,2);w=r.width;h=r.height;cvs.width=Math.max(1,Math.round(w*d));cvs.height=Math.max(1,Math.round(h*d));g.setTransform(d,0,0,d,0,0)}
+fit();if('ResizeObserver'in window)new ResizeObserver(fit).observe(cvs);
+const stages=[...document.querySelectorAll('.pipe .stage')];
+
+/* three acts in thirds of the strip, lined up under the three cards: 01 voice, 02 big model makes clips, 03 squeezed + fine-tuned */
+const A1=2,A2=4.8,A3=7.6,LOOP=9;
+const CELLS=(()=>{const r=rng(4242);return Array.from({length:64},()=>r())})();
+const VOICE=(()=>{const r=rng(9);return Array.from({length:48},(_,i)=>Math.abs(Math.sin(i*.5)*Math.sin(i*.13+1))*(.4+r()*.6))})();
+function wave(x,y,wd,ht,on,col){const n=VOICE.length,bw=wd/n;g.fillStyle=col;for(let i=0;i<n*on;i++){const a=VOICE[i]*ht;g.fillRect(x+i*bw,y-a/2,Math.max(1,bw-1),Math.max(1,a))}}
+function block(cx,cy,sz,split,col){const n=8,cs=sz/n;
+  const pass=(dx,c)=>{g.fillStyle=c;for(let i=0;i<64;i++){g.globalAlpha=.35+CELLS[i]*.55;g.fillRect(cx-sz/2+(i%n)*cs+dx+.5,cy-sz/2+Math.floor(i/n)*cs+.5,Math.max(1,cs-1),Math.max(1,cs-1))}g.globalAlpha=1};
+  g.globalCompositeOperation='lighter';pass(-split,'#ff3b6b');pass(split,'#2fd6ff');pass(0,col);g.globalCompositeOperation='source-over'}
+
+let clock=0,last=performance.now(),vis=true;
+if('IntersectionObserver'in window)new IntersectionObserver(e=>{const v=e[0].isIntersecting;if(v&&!vis){vis=true;last=performance.now();requestAnimationFrame(draw)}vis=v}).observe(cvs);
+function draw(now){
+  const dt=Math.min(.05,(now-last)/1000);last=now;clock+=dt;
+  const t=RM?7:clock%LOOP,fr=Math.floor(now/1000*12),r=rng(fr*7919+5);
+  const act=t<A1?0:t<A2?1:t<A3?2:3;
+  const step=(x,n)=>{x=Math.max(0,Math.min(1,x));let s=Math.floor(x*n);if(r()<.25&&s>0&&x<1)s--;return s/n};
+  const p1=step(t/A1,8),p2=step((t-A1)/(A2-A1),8),p3=step((t-A2)/(A3-A2),6);
+  const z=w/3,cy=h/2,big=h*.62,small=h*.2,f=10;
+  g.fillStyle='#1b2940';g.fillRect(0,0,w,h);
+  g.font=f+'px "IBM Plex Mono",monospace';
+
+  /* 01 · voice */
+  wave(z*.08,cy,z*.84,h*.5,act===0?p1:1,act===0?'#9cc8f0':'rgba(156,200,240,.4)');
+  g.fillStyle=act===0?'#fff':'rgba(255,255,255,.45)';g.fillText('5 s voice',z*.08,f+6);
+
+  /* 02 · big model + clips */
+  if(act>=1){
+    const q=act<2?0:act===3?1:p3,sz=big+(small-big)*q,bx=z*1.25+(z*2.5-z*1.25)*q+(act===2&&q<1?(r()-.5)*10:0);
+    if(act===1){const rows=Math.round(p2*6);for(let i=0;i<rows;i++){const y=cy-big/2+(i+.5)*big/6;
+      g.fillStyle='rgba(156,200,240,.85)';for(let x=0;x<z*.42*(.6+((i*37)%10)/25);x+=3){const a=Math.abs(Math.sin(x*.3+i*5))*big/14;g.fillRect(z*1.25+big/2+10+x,y-a/2,2,Math.max(1,a))}}
+      g.fillStyle='#fff';g.fillText('big AI · '+(p2*5).toFixed(1)+' h of clips',z*1.08,f+6)}
+    if(act>=2){g.setLineDash([3,3]);g.strokeStyle='rgba(125,240,198,.8)';g.strokeRect(z*2.5-small/2,cy-small/2,small,small);g.setLineDash([])}
+    block(bx,cy,sz,act===3?1:3+r()*7,act===3?'#7df0c6':'#6f8ff0');
+    if(act>=2){g.fillStyle=act===3?'rgba(255,255,255,.45)':'#fff';g.fillText('big AI · 1.8 GB',z*1.08,f+6)}  }
+  /* 03 · fine-tuning blocks */
+  if(act>=2){const on=act===3?10:Math.round(p3*10),bw=z*.84,bx0=z*2.08,by=h-10;
+    for(let k=0;k<10;k++){g.fillStyle=k<on?'#7df0c6':'rgba(255,255,255,.15)';g.fillRect(bx0+k*bw/10,by,bw/10-2,4)}
+    g.fillStyle='#fff';g.fillStyle=act===3?'#7df0c6':'#fff';g.fillText(act===3?'small AI · 63 MB':'fine-tuning '+Math.round(p3*100)+'%',z*2.08,f+6)}
+
+  /* glitch: tears and blocks, hardest at each hand-off */
+  const edge=[A1,A2,A3].some(e=>Math.abs(t-e)<.16),I=RM?0:edge?1:act===2?.55:.2;
+  for(let k=0;k<Math.floor(1+I*4);k++){const sy=r()*h,sh=2+r()*h*.15,dx=(r()-.5)*w*.06*I;g.drawImage(cvs,0,sy*d,cvs.width,Math.max(1,sh*d),dx,sy,w,sh)}
+  for(let i=0;i<Math.floor(I*6);i++){const bs=[4,6,9][i%3];g.fillStyle=['#9cc8f0','#ffffff','#7b8ff0'][i%3];g.globalAlpha=.8;g.fillRect(Math.floor(r()*w/bs)*bs,Math.floor(r()*h/bs)*bs,bs*(1+Math.floor(r()*4)),bs);g.globalAlpha=1}
+  g.fillStyle='rgba(0,0,0,.14)';for(let y=fr%3;y<h;y+=3)g.fillRect(0,y,w,1);
+
+  stages.forEach((el,i)=>el.classList.toggle('on',i===Math.min(2,act)));
+  if(!RM&&vis)requestAnimationFrame(draw);
 }
 requestAnimationFrame(draw);
 })();
