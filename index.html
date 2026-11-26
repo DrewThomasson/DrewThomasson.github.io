@@ -168,6 +168,16 @@ p{margin:0;max-width:62ch}
 html.locked{overflow:hidden}
 .wrap{transition:opacity 1.2s ease}
 .wrap.dim{opacity:0}
+/* readouts: shown briefly after the intro, then fade and fold away so the projects move up */
+.strip{max-height:260px;overflow:hidden;transition:opacity .9s ease,max-height 1s cubic-bezier(.6,0,.2,1) .6s,margin 1s cubic-bezier(.6,0,.2,1) .6s}
+.power .cell{overflow:hidden;transition:opacity .9s ease,height 1s cubic-bezier(.6,0,.2,1) .6s}
+.power .ctrl{transition:border-color .6s ease .6s}
+.side{transition:grid-template-rows 1s cubic-bezier(.6,0,.2,1) .6s}
+.wrap.viz-off .strip{opacity:0;max-height:0;margin-top:-10px;pointer-events:none}
+.wrap.viz-off .power .cell{opacity:0;height:0}
+.wrap.viz-off .power .ctrl{border-top-color:transparent}
+.wrap.viz-off .side{grid-template-rows:1fr auto}
+@media (prefers-reduced-motion:reduce){.strip,.power .cell,.power .ctrl,.side{transition:opacity .4s ease}}
 .intro{position:fixed;inset:0;z-index:100;background:var(--navy);clip-path:inset(0px 0px 0px 0px)}
 .intro.leaving{transition:clip-path 1.6s cubic-bezier(.75,0,.2,1)}
 .intro canvas{position:absolute;inset:0}
@@ -240,7 +250,7 @@ html.locked{overflow:hidden}
       <div class="panel stars">
         <div class="lbl">open-source impact <b id="statlive">as of nov 2026</b></div>
         <div class="big" id="sStars">21,400+</div>
-        <div class="meta" style="padding:0 8px">GitHub stars earned</div>
+        <div class="meta" style="padding:0 8px">GitHub stars · all my repos combined</div>
         <div class="mtn"><canvas id="mtn"></canvas></div>
         <div class="kv"><div><div class="k">forks</div><div class="v" id="sForks">1,860+</div></div><div><div class="k">repos</div><div class="v" id="sRepos">78</div></div><div><div class="k">followers</div><div class="v" id="sFollow">350+</div></div></div>
       </div>
@@ -261,7 +271,7 @@ html.locked{overflow:hidden}
 
   <div class="ticker" aria-hidden="true"><span>python ✳ applied ai ✳ audio systems ✳ docker ✳ go ✳ open source ✳ python ✳ applied ai ✳ audio systems ✳ docker ✳ go ✳ open source ✳&nbsp;</span><span>python ✳ applied ai ✳ audio systems ✳ docker ✳ go ✳ open source ✳ python ✳ applied ai ✳ audio systems ✳ docker ✳ go ✳ open source ✳&nbsp;</span></div>
 
-  <div class="sec" id="work"><h2>Built from curiosity.<br>Shipped with care.</h2><span class="mono">selected work · 7 modules</span></div>
+  <div class="sec" id="work"><span class="mono">selected work · 7 modules</span></div>
 
   <article class="panel flag">
     <div class="copy">
@@ -429,8 +439,12 @@ const KW=[[0,['audio'],'(record · measure · report)'],[2,['text-to-speech'],'(
   [24,['books','become','voices'],'']];
 const introEl=$('intro'),pipEl=document.querySelector('.pip'),wrapEl=document.querySelector('.wrap');
 let introAudio=null,introPhase='gate';
+/* after the intro, keep the readouts up for a moment, then fold them away */
+let vizT=0;const VIZ_HOLD=2600;
+function showViz(){clearTimeout(vizT);wrapEl.classList.remove('viz-off')}
+function hideVizSoon(){clearTimeout(vizT);vizT=setTimeout(()=>wrapEl.classList.add('viz-off'),VIZ_HOLD)}
 {let seen=false;try{seen=sessionStorage.getItem('orbit-intro')==='1'}catch(e){}
-  if(seen){introPhase='done';introEl.hidden=true}else document.documentElement.classList.add('locked')}
+  if(seen){introPhase='done';introEl.hidden=true;hideVizSoon()}else document.documentElement.classList.add('locked')}
 
 /* one music element: it plays the intro, then keeps looping quietly as background music */
 const BG=.14;let mGain=null,ducked=false,musicPref=true;
@@ -451,7 +465,7 @@ function startIntro(){
   initAudio();ac.resume();stopClip(true);ensureMusic();ducked=false;
   scrollTo(0,0);document.documentElement.classList.add('locked');
   introEl.classList.remove('leaving');introEl.style.clipPath='inset(0px 0px 0px 0px)';introEl.hidden=false;
-  $('gate').hidden=true;$('skip').hidden=false;wrapEl.classList.add('dim');
+  $('gate').hidden=true;$('skip').hidden=false;wrapEl.classList.add('dim');showViz();
   introAudio.currentTime=0;rampMusic(.85,.02);introPhase='play';statIdx=0;$('src').textContent='intro';
   introAudio.play().catch(()=>finishIntro(true));
 }
@@ -462,7 +476,7 @@ function leaveIntro(){
 }
 function finishIntro(fast){
   introPhase='done';introEl.hidden=true;$('skip').hidden=true;wrapEl.classList.remove('dim');
-  document.documentElement.classList.remove('locked');spike=1;
+  document.documentElement.classList.remove('locked');spike=1;hideVizSoon();
   try{sessionStorage.setItem('orbit-intro','1')}catch(e){}
   if(introAudio&&!introAudio.paused){
     if(musicPref)rampMusic(BG,fast?.8:3);
@@ -476,7 +490,7 @@ $('skip').addEventListener('click',()=>finishIntro(true));
 /* live GitHub stats on the real site; the typed-in numbers stay if the request is blocked or rate-limited */
 (async()=>{try{
   const u=await fetch('https://api.github.com/users/DrewThomasson');if(!u.ok)return;const user=await u.json();
-  const r=await fetch('https://api.github.com/users/DrewThomasson/repos?per_page=100&type=owner');if(!r.ok)return;const repos=(await r.json()).filter(x=>!x.fork);
+  let all=[];for(let p=1;p<=10;p++){const r=await fetch('https://api.github.com/users/DrewThomasson/repos?per_page=100&type=owner&page='+p);if(!r.ok)return;const b=await r.json();all=all.concat(b);if(b.length<100)break}const repos=all.filter(x=>!x.fork);
   const stars=repos.reduce((s,x)=>s+x.stargazers_count,0),forks=repos.reduce((s,x)=>s+x.forks_count,0),k=n=>(n/1000).toFixed(1).replace(/\.0$/,'')+'k';
   $('sStars').textContent=stars.toLocaleString('en-US');KW[10][1]=[stars.toLocaleString('en-US')+'★'];$('sForks').textContent=forks.toLocaleString('en-US');
   $('sRepos').textContent=user.public_repos;$('sFollow').textContent=user.followers.toLocaleString('en-US');
@@ -703,7 +717,7 @@ function draw(){
     starHist.forEach((v,i)=>{if(i%3===1)hair(g,xs(i),ym(v),xs(Math.min(n-1,i+3)),base,C.blue,.22)});
     g.strokeStyle=C.navy;g.lineWidth=1.3;g.beginPath();starHist.forEach((v,i)=>i?g.lineTo(xs(i),ym(v)):g.moveTo(xs(i),ym(v)));g.stroke();g.lineWidth=1;
     g.fillStyle=C.teal;g.beginPath();g.arc(xs(n-1),ym(starHist[n-1]),3+bassE*4+Math.sin(t*3)*.6,0,6.283);g.fill();
-    g.fillStyle=C.mute;g.font='8px '+FONT;g.fillText('EBOOK2AUDIOBOOK ★',L+2,top+8);g.fillText('FEB 2024',L,base-3);g.textAlign='right';g.fillText('NOW',R-8,base-3);g.textAlign='left'}
+    g.fillStyle=C.mute;g.font='8px '+FONT;g.fillText('STAR GROWTH',L+2,top+8);g.fillText('FEB 2024',L,base-3);g.textAlign='right';g.fillText('NOW',R-8,base-3);g.textAlign='left'}
 
   /* orb */
   {const o=cv.orb,g=o.g;clear(o);const cx=o.w/2,cy=o.h/2,R=Math.min(o.w,o.h)*.36,e=bassE*1.6+rms*2;
